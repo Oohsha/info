@@ -17,6 +17,7 @@
             --border-color: rgba(255, 255, 255, 0.1);
             --accent-color: #3b82f6;
             --danger-color: #ef4444;
+            --category-color: #8b5cf6;
             --accent-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
         }
 
@@ -30,7 +31,7 @@
             overflow-x: hidden;
         }
 
-        /* --- 헤더 및 내비게이션 (추가됨) --- */
+        /* --- 헤더 및 내비게이션 --- */
         header {
             position: fixed;
             top: 0; width: 100%;
@@ -57,12 +58,12 @@
 
         /* --- 레이아웃 및 공통 스타일 --- */
         .container { max-width: 1000px; margin: 0 auto; padding: 80px 2rem 2rem 2rem; }
-        .page-section { display: none; /* JS로 화면 전환 통제 */ animation: fadeIn 0.5s ease; }
+        .page-section { display: none; animation: fadeIn 0.5s ease; }
         .page-section.active { display: block; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- 기존 메인 페이지 스타일 --- */
+        /* --- 메인 페이지(Home) 스타일 --- */
         section { padding: 80px 0; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
         .section-title { font-size: 2.5rem; font-weight: 700; margin-bottom: 3rem; position: relative; }
         .section-title::after {
@@ -93,7 +94,7 @@
         
         .header-actions { display: flex; justify-content: flex-end; margin-bottom: 1rem; margin-top: 2rem; }
 
-        /* --- 게시판 공통 및 목록 (추가됨) --- */
+        /* --- 게시판 & Study 공통 및 목록 --- */
         .board-container { padding-top: 50px; min-height: 80vh; }
         .board-table { width: 100%; border-collapse: collapse; margin-top: 1rem; background: var(--surface-color); border-radius: 12px; overflow: hidden; }
         .board-table th, .board-table td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--border-color); }
@@ -101,22 +102,32 @@
         .board-table tr:last-child td { border-bottom: none; }
         .board-table tbody tr { transition: background 0.3s; }
         .board-table tbody tr:hover { background: var(--surface-hover); cursor: pointer; }
-        .col-id { width: 10%; } .col-title { width: 50%; } .col-author { width: 20%; } .col-date { width: 20%; }
+        
+        /* 컬럼 비율 */
+        .col-id { width: 10%; } 
+        .col-title { width: 50%; } 
+        .col-author { width: 20%; } 
+        .col-category { width: 20%; } 
+        .col-date { width: 20%; }
+        
         .empty-row { text-align: center !important; color: var(--text-secondary); padding: 3rem !important; }
 
-        /* --- 게시판 작성 및 상세 (추가됨) --- */
+        /* 카테고리 뱃지 스타일 */
+        .category-badge { display: inline-block; padding: 0.2rem 0.8rem; background: rgba(139, 92, 246, 0.2); color: #c4b5fd; border-radius: 20px; font-size: 0.85rem; font-weight: 600; border: 1px solid rgba(139, 92, 246, 0.5); }
+
+        /* --- 작성 및 상세 페이지 공통 --- */
         .board-form, .board-detail-box { background: var(--surface-color); padding: 2rem; border-radius: 12px; border: 1px solid var(--border-color); margin-top: 2rem; }
         .form-group { margin-bottom: 1.5rem; }
         .form-group label { display: block; margin-bottom: 0.5rem; color: var(--text-secondary); }
         .form-control { width: 100%; padding: 0.8rem; background: var(--bg-color); border: 1px solid var(--border-color); color: white; border-radius: 8px; font-family: inherit; font-size: 1rem; }
         .form-control:focus { outline: none; border-color: var(--accent-color); }
-        textarea.form-control { resize: vertical; min-height: 200px; }
+        textarea.form-control { resize: vertical; min-height: 250px; font-family: monospace; line-height: 1.5; }
         .btn-group { display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem; }
 
         .detail-header { border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 2rem; }
         .detail-title { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
-        .detail-info { color: var(--text-secondary); font-size: 0.9rem; display: flex; gap: 1rem; }
-        .detail-content { font-size: 1.1rem; line-height: 1.8; white-space: pre-wrap; min-height: 200px; }
+        .detail-info { color: var(--text-secondary); font-size: 0.9rem; display: flex; gap: 1rem; align-items: center; }
+        .detail-content { font-size: 1.1rem; line-height: 1.8; white-space: pre-wrap; min-height: 200px; background: var(--bg-color); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-color); }
 
         /* 기존 스크롤 애니메이션 클래스 */
         .fade-in { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
@@ -132,6 +143,7 @@
             <nav class="nav-links">
                 <a id="nav-home" class="active" onclick="navigate('home')">Home</a>
                 <a id="nav-board" onclick="navigate('board-list')">Board</a>
+                <a id="nav-study" onclick="navigate('study-list')">Study</a>
             </nav>
         </div>
     </header>
@@ -176,7 +188,7 @@
         </main>
 
         <!-- ==========================================
-             2. 게시판 목록 페이지
+             2. 일반 게시판 (Board) 영역
         =========================================== -->
         <main id="view-board-list" class="page-section board-container">
             <h2 class="section-title">Board</h2>
@@ -192,30 +204,16 @@
                         <th class="col-date">작성일</th>
                     </tr>
                 </thead>
-                <tbody id="board-tbody">
-                    <!-- JS로 동적 렌더링 -->
-                </tbody>
+                <tbody id="board-tbody"></tbody>
             </table>
         </main>
 
-        <!-- ==========================================
-             3. 게시판 작성 페이지
-        =========================================== -->
         <main id="view-board-write" class="page-section board-container">
             <h2 class="section-title">Write Post</h2>
             <div class="board-form">
-                <div class="form-group">
-                    <label>제목</label>
-                    <input type="text" id="post-title" class="form-control" placeholder="제목을 입력하세요" required>
-                </div>
-                <div class="form-group">
-                    <label>작성자</label>
-                    <input type="text" id="post-author" class="form-control" placeholder="이름을 입력하세요" required>
-                </div>
-                <div class="form-group">
-                    <label>내용</label>
-                    <textarea id="post-content" class="form-control" placeholder="내용을 입력하세요" required></textarea>
-                </div>
+                <div class="form-group"><label>제목</label><input type="text" id="post-title" class="form-control" placeholder="제목을 입력하세요"></div>
+                <div class="form-group"><label>작성자</label><input type="text" id="post-author" class="form-control" placeholder="이름을 입력하세요"></div>
+                <div class="form-group"><label>내용</label><textarea id="post-content" class="form-control" placeholder="내용을 입력하세요"></textarea></div>
                 <div class="btn-group">
                     <button class="btn btn-outline" onclick="navigate('board-list')">취소</button>
                     <button class="btn" onclick="savePost()">등록</button>
@@ -223,58 +221,111 @@
             </div>
         </main>
 
-        <!-- ==========================================
-             4. 게시판 상세 페이지
-        =========================================== -->
         <main id="view-board-detail" class="page-section board-container">
             <h2 class="section-title">View Post</h2>
             <div class="board-detail-box">
                 <div class="detail-header">
-                    <h3 class="detail-title" id="detail-title">게시글 제목</h3>
-                    <div class="detail-info">
-                        <span id="detail-author">작성자</span> | 
-                        <span id="detail-date">2023-10-25</span>
-                    </div>
+                    <h3 class="detail-title" id="detail-title"></h3>
+                    <div class="detail-info"><span id="detail-author"></span> | <span id="detail-date"></span></div>
                 </div>
-                <div class="detail-content" id="detail-content">
-                    게시글 내용이 표시됩니다.
-                </div>
+                <div class="detail-content" id="detail-content"></div>
                 <div class="btn-group">
                     <button class="btn btn-outline" onclick="navigate('board-list')">목록으로</button>
-                    <button class="btn btn-danger" id="btn-delete" onclick="deletePost()">삭제</button>
+                    <button class="btn btn-danger" onclick="deletePost()">삭제</button>
+                </div>
+            </div>
+        </main>
+
+        <!-- ==========================================
+             3. Study (공부한 내용) 영역 (새로 추가됨)
+        =========================================== -->
+        <!-- Study 목록 -->
+        <main id="view-study-list" class="page-section board-container">
+            <h2 class="section-title">Study Log</h2>
+            <div class="header-actions">
+                <button class="btn" onclick="navigate('study-write')">학습 기록하기</button>
+            </div>
+            <table class="board-table">
+                <thead>
+                    <tr>
+                        <th class="col-id">번호</th>
+                        <th class="col-title">학습 주제</th>
+                        <th class="col-category">카테고리</th>
+                        <th class="col-date">작성일</th>
+                    </tr>
+                </thead>
+                <tbody id="study-tbody"></tbody>
+            </table>
+        </main>
+
+        <!-- Study 작성 -->
+        <main id="view-study-write" class="page-section board-container">
+            <h2 class="section-title">Record Study</h2>
+            <div class="board-form">
+                <div class="form-group">
+                    <label>학습 주제 (제목)</label>
+                    <input type="text" id="study-title" class="form-control" placeholder="예: JavaScript 비동기 처리">
+                </div>
+                <div class="form-group">
+                    <label>카테고리 (분야)</label>
+                    <input type="text" id="study-category" class="form-control" placeholder="예: JavaScript, React, Backend 등">
+                </div>
+                <div class="form-group">
+                    <label>학습 내용 설명 (코드 포함 가능)</label>
+                    <textarea id="study-content" class="form-control" placeholder="학습한 내용이나 코드 스니펫을 자유롭게 기록하세요."></textarea>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-outline" onclick="navigate('study-list')">취소</button>
+                    <button class="btn" onclick="saveStudy()">저장</button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Study 상세조회 -->
+        <main id="view-study-detail" class="page-section board-container">
+            <h2 class="section-title">Study Detail</h2>
+            <div class="board-detail-box">
+                <div class="detail-header">
+                    <h3 class="detail-title" id="study-detail-title"></h3>
+                    <div class="detail-info">
+                        <span id="study-detail-category" class="category-badge"></span>
+                        <span id="study-detail-date"></span>
+                    </div>
+                </div>
+                <div class="detail-content" id="study-detail-content"></div>
+                <div class="btn-group">
+                    <button class="btn btn-outline" onclick="navigate('study-list')">목록으로</button>
+                    <button class="btn btn-danger" onclick="deleteStudy()">삭제</button>
                 </div>
             </div>
         </main>
 
     </div>
 
-    <!-- 스크립트: 화면 전환 및 로컬스토리지 게시판 로직 -->
+    <!-- JavaScript 로직 -->
     <script>
         /* -----------------------------------------------------
-           1. 화면 전환 (Navigation) 로직
+           1. 화면 전환 (Navigation)
         ----------------------------------------------------- */
         function navigate(viewId) {
-            // 모든 섹션 숨기기
             document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
-            // 선택한 섹션 보여주기
             document.getElementById(`view-${viewId}`).classList.add('active');
 
-            // 네비게이션 메뉴 활성화 상태 변경
+            // 메뉴 활성화 상태 관리
             document.querySelectorAll('.nav-links a').forEach(el => el.classList.remove('active'));
             if(viewId === 'home') document.getElementById('nav-home').classList.add('active');
-            if(viewId.startsWith('board')) document.getElementById('nav-board').classList.add('active');
+            else if(viewId.startsWith('board')) document.getElementById('nav-board').classList.add('active');
+            else if(viewId.startsWith('study')) document.getElementById('nav-study').classList.add('active');
 
-            // 화면 최상단으로 이동
             window.scrollTo(0, 0);
 
-            // 게시판 목록으로 갈 때마다 리스트 갱신
-            if(viewId === 'board-list') {
-                renderBoardList();
-            }
+            // 해당 목록 페이지로 갈 때마다 데이터 갱신
+            if(viewId === 'board-list') renderBoardList();
+            if(viewId === 'study-list') renderStudyList();
         }
 
         /* -----------------------------------------------------
-           2. 기존 스크롤 애니메이션 옵저버 (Home 화면용)
+           2. 스크롤 애니메이션 옵저버 (Home)
         ----------------------------------------------------- */
         const observerOptions = { root: null, rootMargin: '0px', threshold: 0.2 };
         const observer = new IntersectionObserver((entries, observer) => {
@@ -290,133 +341,141 @@
                 }
             });
         }, observerOptions);
-
         document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
 
         /* -----------------------------------------------------
-           3. 게시판 로직 (LocalStorage 활용)
+           3. 공통 유틸리티 함수
         ----------------------------------------------------- */
-        const STORAGE_KEY = 'my_portfolio_board';
-        let currentViewPostId = null;
-
-        // 로컬스토리지에서 데이터 가져오기
-        function getPosts() {
-            const data = localStorage.getItem(STORAGE_KEY);
-            return data ? JSON.parse(data) : [];
+        function getTodayStr() {
+            const today = new Date();
+            return `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+        }
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, tag => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+            }[tag]));
         }
 
-        // 게시글 목록 렌더링
+        /* -----------------------------------------------------
+           4. 일반 게시판 (Board) 로직
+        ----------------------------------------------------- */
+        const BOARD_KEY = 'my_portfolio_board';
+        let currentBoardId = null;
+
+        function getPosts() { return JSON.parse(localStorage.getItem(BOARD_KEY)) || []; }
+        
         function renderBoardList() {
             const posts = getPosts();
             const tbody = document.getElementById('board-tbody');
             tbody.innerHTML = '';
-
             if(posts.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="4" class="empty-row">등록된 게시글이 없습니다.</td></tr>`;
                 return;
             }
-
-            // 최신 글이 위로 오도록 역순으로 렌더링
             posts.slice().reverse().forEach((post, index) => {
                 const tr = document.createElement('tr');
-                tr.onclick = () => viewPost(post.id); // 클릭 시 상세 페이지로
-                
-                // 역순 번호 계산
-                const displayNum = posts.length - index;
+                tr.onclick = () => viewPost(post.id);
+                tr.innerHTML = `<td>${posts.length - index}</td><td>${escapeHTML(post.title)}</td><td>${escapeHTML(post.author)}</td><td>${post.date}</td>`;
+                tbody.appendChild(tr);
+            });
+        }
 
+        function savePost() {
+            const title = document.getElementById('post-title').value.trim();
+            const author = document.getElementById('post-author').value.trim();
+            const content = document.getElementById('post-content').value.trim();
+            if(!title || !author || !content) return alert('모든 항목을 입력해주세요.');
+
+            const posts = getPosts();
+            posts.push({ id: Date.now().toString(), title, author, content, date: getTodayStr() });
+            localStorage.setItem(BOARD_KEY, JSON.stringify(posts));
+            
+            document.getElementById('post-title').value = '';
+            document.getElementById('post-author').value = '';
+            document.getElementById('post-content').value = '';
+            navigate('board-list');
+        }
+
+        function viewPost(id) {
+            const post = getPosts().find(p => p.id === id);
+            if(!post) return alert('존재하지 않는 게시글입니다.');
+            currentBoardId = id;
+            document.getElementById('detail-title').innerText = post.title;
+            document.getElementById('detail-author').innerText = post.author;
+            document.getElementById('detail-date').innerText = post.date;
+            document.getElementById('detail-content').innerText = post.content;
+            navigate('board-detail');
+        }
+
+        function deletePost() {
+            if(!confirm('정말로 삭제하시겠습니까?')) return;
+            const posts = getPosts().filter(p => p.id !== currentBoardId);
+            localStorage.setItem(BOARD_KEY, JSON.stringify(posts));
+            navigate('board-list');
+        }
+
+        /* -----------------------------------------------------
+           5. Study (공부한 내용) 로직
+        ----------------------------------------------------- */
+        const STUDY_KEY = 'my_portfolio_study';
+        let currentStudyId = null;
+
+        function getStudies() { return JSON.parse(localStorage.getItem(STUDY_KEY)) || []; }
+
+        function renderStudyList() {
+            const studies = getStudies();
+            const tbody = document.getElementById('study-tbody');
+            tbody.innerHTML = '';
+            if(studies.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="empty-row">학습 기록이 없습니다. 새로운 내용을 기록해보세요!</td></tr>`;
+                return;
+            }
+            studies.slice().reverse().forEach((study, index) => {
+                const tr = document.createElement('tr');
+                tr.onclick = () => viewStudy(study.id);
                 tr.innerHTML = `
-                    <td>${displayNum}</td>
-                    <td>${escapeHTML(post.title)}</td>
-                    <td>${escapeHTML(post.author)}</td>
-                    <td>${post.date}</td>
+                    <td>${studies.length - index}</td>
+                    <td>${escapeHTML(study.title)}</td>
+                    <td><span class="category-badge">${escapeHTML(study.category)}</span></td>
+                    <td>${study.date}</td>
                 `;
                 tbody.appendChild(tr);
             });
         }
 
-        // 새 게시글 저장 (Create)
-        function savePost() {
-            const titleInput = document.getElementById('post-title');
-            const authorInput = document.getElementById('post-author');
-            const contentInput = document.getElementById('post-content');
+        function saveStudy() {
+            const title = document.getElementById('study-title').value.trim();
+            const category = document.getElementById('study-category').value.trim();
+            const content = document.getElementById('study-content').value.trim();
+            if(!title || !category || !content) return alert('모든 항목을 입력해주세요.');
 
-            const title = titleInput.value.trim();
-            const author = authorInput.value.trim();
-            const content = contentInput.value.trim();
-
-            if(!title || !author || !content) {
-                alert('모든 항목을 입력해주세요.');
-                return;
-            }
-
-            const today = new Date();
-            const dateStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
-
-            const newPost = {
-                id: Date.now().toString(), // 고유 ID 부여
-                title: title,
-                author: author,
-                content: content,
-                date: dateStr
-            };
-
-            const posts = getPosts();
-            posts.push(newPost);
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
-
-            // 입력 폼 초기화
-            titleInput.value = '';
-            authorInput.value = '';
-            contentInput.value = '';
-
-            // 목록 화면으로 이동
-            navigate('board-list');
-        }
-
-        // 게시글 상세 조회 (Read)
-        function viewPost(postId) {
-            const posts = getPosts();
-            const post = posts.find(p => p.id === postId);
-
-            if(!post) {
-                alert('존재하지 않는 게시글입니다.');
-                return;
-            }
-
-            currentViewPostId = postId; // 현재 보고 있는 글 ID 저장 (삭제를 위해)
-
-            document.getElementById('detail-title').innerText = post.title;
-            document.getElementById('detail-author').innerText = post.author;
-            document.getElementById('detail-date').innerText = post.date;
-            document.getElementById('detail-content').innerText = post.content;
-
-            navigate('board-detail');
-        }
-
-        // 게시글 삭제 (Delete)
-        function deletePost() {
-            if(!confirm('정말로 이 게시글을 삭제하시겠습니까?')) return;
-
-            let posts = getPosts();
-            posts = posts.filter(p => p.id !== currentViewPostId);
+            const studies = getStudies();
+            studies.push({ id: Date.now().toString(), title, category, content, date: getTodayStr() });
+            localStorage.setItem(STUDY_KEY, JSON.stringify(studies));
             
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
-            alert('삭제되었습니다.');
-            navigate('board-list');
+            document.getElementById('study-title').value = '';
+            document.getElementById('study-category').value = '';
+            document.getElementById('study-content').value = '';
+            navigate('study-list');
         }
 
-        // XSS 방지를 위한 HTML 문자 치환 함수
-        function escapeHTML(str) {
-            return str.replace(/[&<>'"]/g, 
-                tag => ({
-                    '&': '&amp;',
-                    '<': '&lt;',
-                    '>': '&gt;',
-                    "'": '&#39;',
-                    '"': '&quot;'
-                }[tag])
-            );
+        function viewStudy(id) {
+            const study = getStudies().find(s => s.id === id);
+            if(!study) return alert('존재하지 않는 기록입니다.');
+            currentStudyId = id;
+            document.getElementById('study-detail-title').innerText = study.title;
+            document.getElementById('study-detail-category').innerText = study.category;
+            document.getElementById('study-detail-date').innerText = study.date;
+            document.getElementById('study-detail-content').innerText = study.content;
+            navigate('study-detail');
+        }
+
+        function deleteStudy() {
+            if(!confirm('정말로 이 학습 기록을 삭제하시겠습니까?')) return;
+            const studies = getStudies().filter(s => s.id !== currentStudyId);
+            localStorage.setItem(STUDY_KEY, JSON.stringify(studies));
+            navigate('study-list');
         }
 
     </script>
