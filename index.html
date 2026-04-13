@@ -1,1426 +1,215 @@
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>정태훈 | Portfolio & Board</title>
-    <!-- 고급스러운 타이포그래피를 위해 Pretendard 폰트 적용 -->
-    <link rel="stylesheet" as="style" crossorigin
-        href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" />
-    <!-- 코드 하이라이팅 테마 (Atom One Dark) -->
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <style>
-        /* --- CSS 변수 설정 --- */
-        :root {
-            --bg-color: #0a0a0a;
-            --surface-color: #1a1a1a;
-            --surface-hover: #2a2a2a;
-            --text-primary: #ffffff;
-            --text-secondary: #a1a1aa;
-            --border-color: rgba(255, 255, 255, 0.1);
-            --accent-color: #3b82f6;
-            --danger-color: #ef4444;
-            --category-color: #8b5cf6;
-            --heart-color: #f43f5e; /* 좋아요 하트 색상 */
-            --accent-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-        }
-
-        /* --- 기본 리셋 및 폰트 --- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Pretendard', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-primary);
-            line-height: 1.6;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-        }
-
-        /* --- 헤더 및 내비게이션 --- */
-        header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(10, 10, 10, 0.8);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border-color);
-            z-index: 1000;
-        }
-
-        .nav-container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: white;
-            cursor: pointer;
-        }
-
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s;
-            cursor: pointer;
-        }
-
-        .nav-links a:hover,
-        .nav-links a.active {
-            color: white;
-        }
-
-        /* 인증 헤더 UI */
-        .auth-nav {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            border-left: 1px solid var(--border-color);
-            padding-left: 1.5rem;
-        }
-
-        .auth-nav span {
-            font-weight: 600;
-            color: #c4b5fd;
-            font-size: 0.95rem;
-        }
-
-        .auth-nav a {
-            font-size: 0.95rem;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: 0.3s;
-            font-weight: 600;
-        }
-
-        .auth-nav a:hover {
-            color: white;
-        }
-
-        .auth-nav .login-btn {
-            color: var(--accent-color);
-        }
-
-        /* --- 레이아웃 및 공통 스타일 --- */
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 80px 2rem 2rem 2rem;
-        }
-
-        .page-section {
-            display: none;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .page-section.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* --- 메인 페이지(Home) 스타일 --- */
-        section {
-            padding: 80px 0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .section-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 3rem;
-            position: relative;
-        }
-
-        .section-title::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: -10px;
-            width: 60px;
-            height: 4px;
-            background: var(--accent-gradient);
-            border-radius: 2px;
-        }
-
-        .hero-subtitle {
-            font-size: 1.2rem;
-            color: var(--accent-color);
-            font-weight: 600;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 1rem;
-        }
-
-        .hero-title {
-            font-size: 4rem;
-            font-weight: 800;
-            line-height: 1.2;
-            margin-bottom: 1.5rem;
-        }
-
-        .hero-title span {
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero-desc {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-            max-width: 600px;
-        }
-
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .skill-category {
-            background-color: var(--surface-color);
-            padding: 2rem;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            transition: transform 0.3s ease;
-        }
-
-        .skill-category:hover {
-            transform: translateY(-5px);
-        }
-
-        .skill-category h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
-            color: var(--text-primary);
-        }
-
-        .skill-item {
-            margin-bottom: 1.5rem;
-        }
-
-        .skill-info {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
-
-        .skill-bar-bg {
-            width: 100%;
-            height: 8px;
-            background-color: #333;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .skill-bar-fill {
-            height: 100%;
-            background: var(--accent-gradient);
-            border-radius: 4px;
-            width: 0;
-            transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-
-        .contact-content {
-            background-color: var(--surface-color);
-            padding: 3rem;
-            border-radius: 12px;
-            text-align: center;
-        }
-
-        .contact-content p {
-            color: var(--text-secondary);
-            margin-bottom: 2rem;
-            font-size: 1.2rem;
-        }
-
-        /* --- 🌟 GitHub Projects 연동 스타일 --- */
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .project-card {
-            background-color: var(--surface-color);
-            padding: 2rem;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            transition: transform 0.3s ease, border-color 0.3s ease;
-            text-decoration: none;
-            color: inherit;
-            display: flex;
-            flex-direction: column;
-            cursor: pointer;
-        }
-
-        .project-card:hover {
-            transform: translateY(-8px);
-            border-color: var(--accent-color);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-
-        .project-title {
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .project-title::after {
-            content: '↗';
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-            transition: color 0.3s;
-        }
-
-        .project-card:hover .project-title::after {
-            color: var(--accent-color);
-        }
-
-        .project-desc {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            margin-bottom: 1.5rem;
-            flex-grow: 1;
-            line-height: 1.5;
-        }
-
-        .lang-badge {
-            display: inline-block;
-            padding: 0.3rem 0.8rem;
-            background: rgba(59, 130, 246, 0.1);
-            color: var(--accent-color);
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            border: 1px solid rgba(59, 130, 246, 0.3);
-        }
-
-        /* --- 버튼 공통 스타일 --- */
-        .btn {
-            display: inline-block;
-            padding: 0.8rem 2rem;
-            background: var(--accent-gradient);
-            color: white;
-            text-decoration: none;
-            font-weight: 600;
-            border-radius: 30px;
-            transition: opacity 0.3s ease, transform 0.3s ease;
-            border: none;
-            cursor: pointer;
-        }
-
-        .btn:hover {
-            opacity: 0.9;
-            transform: scale(1.05);
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 1px solid var(--accent-color);
-            color: var(--accent-color);
-        }
-
-        .btn-outline:hover {
-            background: var(--accent-color);
-            color: white;
-        }
-
-        .btn-danger {
-            background: var(--danger-color);
-        }
-
-        .btn-full {
-            width: 100%;
-            padding: 1rem;
-            margin-top: 1rem;
-        }
-
-        .header-actions {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 1rem;
-            margin-top: 2rem;
-        }
-
-        /* --- 게시판 & Study 공통 및 목록 --- */
-        .board-container {
-            padding-top: 50px;
-            min-height: 80vh;
-        }
-
-        .board-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-            background: var(--surface-color);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .board-table th,
-        .board-table td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .board-table th {
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-secondary);
-            font-weight: 600;
-        }
-
-        .board-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .board-table tbody tr {
-            transition: background 0.3s;
-        }
-
-        .board-table tbody tr:hover {
-            background: var(--surface-hover);
-            cursor: pointer;
-        }
-
-        .empty-row {
-            text-align: center !important;
-            color: var(--text-secondary);
-            padding: 3rem !important;
-        }
-
-        .category-badge {
-            display: inline-block;
-            padding: 0.2rem 0.8rem;
-            background: rgba(139, 92, 246, 0.2);
-            color: #c4b5fd;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            border: 1px solid rgba(139, 92, 246, 0.5);
-        }
-
-        /* --- 폼(Form) 공통 --- */
-        .board-form,
-        .board-detail-box {
-            background: var(--surface-color);
-            padding: 2rem;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            margin-top: 2rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 1rem;
-            background: var(--bg-color);
-            border: 1px solid var(--border-color);
-            color: white;
-            border-radius: 8px;
-            font-family: inherit;
-            font-size: 1rem;
-            transition: border 0.3s;
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--accent-color);
-        }
-
-        textarea.form-control {
-            resize: vertical;
-            min-height: 250px;
-            line-height: 1.5;
-        }
-
-        #study-content {
-            font-family: 'Consolas', monospace;
-            min-height: 350px;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 1rem;
-            justify-content: flex-end;
-            margin-top: 2rem;
-        }
-
-        /* --- 마크다운 렌더링 영역 --- */
-        .detail-header {
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .detail-title {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .detail-info {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-
-        .detail-content {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #e5e7eb;
-        }
-
-        #detail-content {
-            white-space: pre-wrap;
-            background: var(--bg-color);
-            padding: 1.5rem;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-        }
-
-        #study-detail-content h1,
-        #study-detail-content h2,
-        #study-detail-content h3 {
-            color: #ffffff;
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-            font-weight: 700;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding-bottom: 0.5rem;
-        }
-
-        #study-detail-content p {
-            margin-bottom: 1.2rem;
-        }
-
-        #study-detail-content pre {
-            background: #0d1117 !important;
-            padding: 1.5rem;
-            border-radius: 8px;
-            overflow-x: auto;
-            margin: 1.5rem 0;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-        }
-
-        #study-detail-content pre code {
-            font-family: 'Fira Code', Consolas, monospace;
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        /* --- 로그인 & 회원가입 폼 --- */
-        .auth-wrapper {
-            min-height: 80vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .auth-card {
-            background: var(--surface-color);
-            padding: 3rem;
-            border-radius: 16px;
-            border: 1px solid var(--border-color);
-            width: 100%;
-            max-width: 450px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-
-        .auth-title {
-            text-align: center;
-            font-size: 2rem;
-            font-weight: 800;
-            margin-bottom: 2rem;
-        }
-
-        .auth-footer {
-            text-align: center;
-            margin-top: 1.5rem;
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-        }
-
-        .auth-footer a {
-            color: var(--accent-color);
-            text-decoration: none;
-            font-weight: 600;
-            cursor: pointer;
-            transition: opacity 0.3s;
-        }
-
-        .auth-footer a:hover {
-            opacity: 0.8;
-            text-decoration: underline;
-        }
-
-        .error-msg {
-            color: var(--danger-color);
-            font-size: 0.85rem;
-            margin-top: 0.5rem;
-            display: none;
-        }
-
-        /* 기존 스크롤 애니메이션 클래스 */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-        }
-
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* --- 🔥 새롭게 추가된 좋아요 & 댓글 스타일 --- */
-        .interaction-bar {
-            margin-top: 2rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-        }
-
-        .btn-like {
-            background: transparent;
-            border: 1px solid var(--heart-color);
-            color: var(--heart-color);
-            padding: 0.6rem 1.5rem;
-            border-radius: 30px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 1rem;
-            transition: 0.3s;
-        }
-
-        .btn-like:hover {
-            background: rgba(244, 63, 94, 0.1);
-        }
-
-        .btn-like.liked {
-            background: var(--heart-color);
-            color: white;
-        }
-
-        .comments-section {
-            margin-top: 2rem;
-            background: var(--bg-color);
-            padding: 1.5rem;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-        }
-
-        .comments-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .comment-item {
-            padding: 1rem 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .comment-item:last-child {
-            border-bottom: none;
-        }
-
-        .comment-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-        }
-
-        .comment-author {
-            font-weight: 700;
-            color: var(--accent-color);
-        }
-
-        .comment-date {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
-
-        .comment-text {
-            color: #e5e7eb;
-            line-height: 1.5;
-            word-break: break-all;
-        }
-
-        .comment-input-group {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-
-        .comment-input-group input {
-            flex-grow: 1;
-        }
+        :root { --bg-color:#0a0a0a; --surface-color:#1a1a1a; --surface-hover:#2a2a2a; --text-primary:#ffffff; --text-secondary:#a1a1aa; --border-color:rgba(255,255,255,0.1); --accent-color:#3b82f6; --heart-color:#f43f5e; --accent-gradient:linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Pretendard', sans-serif; background-color:var(--bg-color); color:var(--text-primary); line-height:1.6; overflow-x:hidden; scroll-behavior:smooth; }
+        header { position:fixed; top:0; width:100%; background:rgba(10,10,10,0.8); backdrop-filter:blur(10px); border-bottom:1px solid var(--border-color); z-index:1000; }
+        .nav-container { max-width:1000px; margin:0 auto; padding:1rem 2rem; display:flex; justify-content:space-between; align-items:center; }
+        .logo { font-size:1.5rem; font-weight:800; cursor:pointer; }
+        .nav-links { display:flex; gap:2rem; align-items:center; } .nav-links a { color:var(--text-secondary); text-decoration:none; font-weight:600; cursor:pointer; transition:0.3s; } .nav-links a:hover { color:white; }
+        .auth-nav { border-left:1px solid var(--border-color); padding-left:1.5rem; display:flex; align-items:center; gap:1rem; } .auth-nav span { color:#c4b5fd; font-weight:600; font-size:0.9rem; }
+        .container { max-width:1000px; margin:0 auto; padding:80px 2rem 50px 2rem; }
+        .page-section { display:none; animation:fadeIn 0.5s ease; } .page-section.active { display:block; }
+        @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+        section { padding:100px 0; min-height:100vh; display:flex; flex-direction:column; justify-content:center; }
+        .section-title { font-size:2.5rem; font-weight:700; margin-bottom:3rem; position:relative; } .section-title::after { content:''; position:absolute; left:0; bottom:-10px; width:60px; height:4px; background:var(--accent-gradient); border-radius:2px; }
+        .hero-subtitle { font-size:1.2rem; color:var(--accent-color); font-weight:600; letter-spacing:2px; text-transform:uppercase; margin-bottom:1rem; }
+        .hero-title { font-size:4rem; font-weight:800; line-height:1.2; margin-bottom:1.5rem; } .hero-title span { background:var(--accent-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+        .skills-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:2rem; }
+        .skill-category { background-color:var(--surface-color); padding:2rem; border-radius:12px; border:1px solid var(--border-color); transition:0.3s; } .skill-category:hover { transform:translateY(-5px); }
+        .skill-item { margin-bottom:1.5rem; } .skill-info { display:flex; justify-content:space-between; margin-bottom:0.5rem; font-size:0.9rem; color:var(--text-secondary); }
+        .skill-bar-bg { width:100%; height:8px; background-color:#333; border-radius:4px; overflow:hidden; } .skill-bar-fill { height:100%; background:var(--accent-gradient); width:0; transition:width 1.5s ease; }
+        .projects-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:2rem; }
+        .project-card { background-color:var(--surface-color); padding:2rem; border-radius:12px; border:1px solid var(--border-color); text-decoration:none; color:inherit; transition:0.3s; display:flex; flex-direction:column; } .project-card:hover { transform:translateY(-8px); border-color:var(--accent-color); }
+        .btn { display:inline-block; padding:0.8rem 2.5rem; background:var(--accent-gradient); color:white; font-weight:600; border-radius:30px; border:none; cursor:pointer; transition:0.3s; } .btn:hover { opacity:0.9; transform:scale(1.05); } .btn-outline { background:transparent; border:1px solid var(--accent-color); color:var(--accent-color); }
+        .board-table { width:100%; border-collapse:collapse; background:var(--surface-color); border-radius:12px; overflow:hidden; margin-top:2rem; } .board-table th, .board-table td { padding:1.2rem; text-align:left; border-bottom:1px solid var(--border-color); } .board-table tbody tr:hover { background:var(--surface-hover); cursor:pointer; }
+        .form-control { width:100%; padding:1rem; background:var(--bg-color); border:1px solid var(--border-color); color:white; border-radius:8px; font-family:inherit; }
+        .interaction-bar { margin:2rem 0; padding:1rem 0; border-top:1px solid var(--border-color); border-bottom:1px solid var(--border-color); }
+        .btn-like { background:transparent; border:1px solid var(--heart-color); color:var(--heart-color); padding:0.7rem 1.8rem; border-radius:30px; cursor:pointer; font-weight:700; display:inline-flex; align-items:center; gap:8px; transition:0.3s; } .btn-like.liked { background:var(--heart-color); color:white; }
+        .comment-item { padding:1.2rem; background:rgba(255,255,255,0.03); border-radius:8px; margin-bottom:1rem; border-left:4px solid var(--accent-color); }
+        .category-badge { padding:0.2rem 0.8rem; background:rgba(139,92,246,0.2); color:#c4b5fd; border-radius:20px; font-size:0.85rem; }
+        .fade-in { opacity:0; transform:translateY(30px); transition:0.8s ease; } .fade-in.visible { opacity:1; transform:translateY(0); }
     </style>
 </head>
-
 <body>
-
     <header>
         <div class="nav-container">
             <div class="logo" onclick="navigate('home')">JungTaeHune</div>
             <div class="nav-right">
-                <nav class="nav-links">
-                    <a id="nav-home" class="active" onclick="navigate('home')">Home</a>
-                    <a id="nav-board" onclick="navigate('board-list')">Board</a>
-                    <a id="nav-study" onclick="navigate('study-list')">Study</a>
-                </nav>
-                <div class="auth-nav" id="header-auth-area"></div>
+                <nav class="nav-links"><a onclick="navigate('home')">Home</a><a onclick="navigate('board-list')">Board</a><a onclick="navigate('study-list')">Study</a><div class="auth-nav" id="header-auth-area"></div></nav>
             </div>
         </div>
     </header>
 
     <div class="container">
-
-        <!-- ==========================================
-             1. 메인 페이지 (Home)
-        =========================================== -->
+        <!-- 1. Home -->
         <main id="view-home" class="page-section active">
-
-            <section id="hero" class="fade-in">
-                <div class="hero-subtitle">Software Engineer</div>
-                <h1 class="hero-title">JungTaeHune<br><span>Creative Developer</span></h1>
-                <p class="hero-desc">사용자 경험을 최우선으로 생각하며, 효율적이고 확장 가능한 코드를 작성하는 것을 목표로 합니다. 끊임없이 변화하는 기술 트렌드 속에서 본질을 잃지
-                    않는 개발자가 되겠습니다.</p>
-            </section>
-
+            <section id="hero" class="fade-in"><div class="hero-subtitle">Software Engineer</div><div class="hero-title">JungTaeHune<br><span>Creative Developer</span></div><p style="max-width:600px;color:var(--text-secondary);font-size:1.1rem">사용자 경험을 최우선으로 생각하는 개발자입니다.</p></section>
+            
+            <!-- 기술 스택 섹션 복구 -->
             <section id="skills" class="fade-in">
                 <h2 class="section-title">Technical Skills</h2>
                 <div class="skills-grid">
                     <div class="skill-category">
                         <h3>Frontend</h3>
-                        <div class="skill-item">
-                            <div class="skill-info"><span>JavaScript (ES6+)</span><span>90%</span></div>
-                            <div class="skill-bar-bg">
-                                <div class="skill-bar-fill" data-width="90%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <div class="skill-info"><span>React.js / Next.js</span><span>85%</span></div>
-                            <div class="skill-bar-bg">
-                                <div class="skill-bar-fill" data-width="85%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <div class="skill-info"><span>TypeScript</span><span>75%</span></div>
-                            <div class="skill-bar-bg">
-                                <div class="skill-bar-fill" data-width="75%"></div>
-                            </div>
-                        </div>
+                        <div class="skill-item"><div class="skill-info"><span>JavaScript (ES6+)</span><span>90%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-width="90%"></div></div></div>
+                        <div class="skill-item"><div class="skill-info"><span>React.js / Next.js</span><span>85%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-width="85%"></div></div></div>
+                        <div class="skill-item"><div class="skill-info"><span>TypeScript</span><span>75%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-width="75%"></div></div></div>
                     </div>
                     <div class="skill-category">
                         <h3>Backend & Tools</h3>
-                        <div class="skill-item">
-                            <div class="skill-info"><span>Node.js / Express</span><span>80%</span></div>
-                            <div class="skill-bar-bg">
-                                <div class="skill-bar-fill" data-width="80%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <div class="skill-info"><span>Firebase / Firestore</span><span>85%</span></div>
-                            <div class="skill-bar-bg">
-                                <div class="skill-bar-fill" data-width="85%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <div class="skill-info"><span>Java Spring</span><span>85%</span></div>
-                            <div class="skill-bar-bg">
-                                <div class="skill-bar-fill" data-width="85%"></div>
-                            </div>
-                        </div>
+                        <div class="skill-item"><div class="skill-info"><span>Node.js / Firebase</span><span>85%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-width="85%"></div></div></div>
+                        <div class="skill-item"><div class="skill-info"><span>Python</span><span>70%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-width="70%"></div></div></div>
+                        <div class="skill-item"><div class="skill-info"><span>Java Spring</span><span>80%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-width="80%"></div></div></div>
                     </div>
                 </div>
             </section>
 
-            <!-- 🌟 GitHub API Projects 섹션 추가 -->
-            <section id="projects" class="fade-in">
-                <h2 class="section-title">Featured Projects</h2>
-                <p class="hero-desc" style="margin-bottom: 3rem;">제가 진행한 주요 프로젝트들을 GitHub API를 통해 실시간으로 보여줍니다.</p>
-                <div class="projects-grid" id="github-projects-container">
-                    <p style="color: var(--text-secondary);">GitHub 데이터를 불러오는 중입니다...</p>
-                </div>
-            </section>
-
-            <section id="contact" class="fade-in">
-                <h2 class="section-title">Contact</h2>
-                <div class="contact-content">
-                    <p>새로운 프로젝트나 협업에 대한 제안은 언제나 환영합니다.<br>아래 버튼을 통해 메일을 보내주시면 확인 후 회신드리겠습니다.</p>
-                    <a href="mailto:sdh250415@sdh.hs.kr" class="btn">Send Email</a>
-                </div>
-            </section>
+            <section id="projects" class="fade-in"><h2 class="section-title">Featured Projects</h2><div class="projects-grid" id="github-projects-container">로딩중...</div></section>
+            
+            <section id="contact" class="fade-in"><h2 class="section-title">Contact</h2><div class="skill-category" style="text-align:center;padding:4rem"><p style="font-size:1.2rem;margin-bottom:2rem">새로운 프로젝트나 협업 제안은 언제나 환영입니다.</p><a href="mailto:sdh250415@sdh.hs.kr" class="btn">Send Email</a></div></section>
         </main>
 
-        <!-- ==========================================
-             2. 로그인 & 회원가입 (Auth)
-        =========================================== -->
-        <main id="view-login" class="page-section">
-            <div class="auth-wrapper">
-                <div class="auth-card">
-                    <h2 class="auth-title">Welcome Back</h2>
-                    <div class="form-group"><label>Email</label><input type="email" id="login-email"
-                            class="form-control" placeholder="이메일을 입력하세요"></div>
-                    <div class="form-group"><label>Password</label><input type="password" id="login-password"
-                            class="form-control" placeholder="비밀번호를 입력하세요"
-                            onkeyup="if(event.key==='Enter') handleLogin()">
-                        <div id="login-error" class="error-msg">이메일 또는 비밀번호가 일치하지 않습니다.</div>
-                    </div>
-                    <button class="btn btn-full" onclick="handleLogin()">Login</button>
-                    <div class="auth-footer">계정이 없으신가요? <a onclick="navigate('signup')">회원가입 (Sign up)</a></div>
-                </div>
-            </div>
-        </main>
+        <!-- 2. Auth -->
+        <main id="view-login" class="page-section"><div style="max-width:400px;margin:80px auto" class="skill-category"><h2>Login</h2><div style="margin:20px 0"><input type="email" id="l-email" class="form-control" placeholder="Email" style="margin-bottom:15px"><input type="password" id="l-pw" class="form-control" placeholder="Password"></div><button class="btn" style="width:100%" onclick="handleLogin()">Login</button><p style="margin-top:20px;text-align:center">No account? <a onclick="navigate('signup')" style="color:var(--accent-color);cursor:pointer">Sign up</a></p></div></main>
+        <main id="view-signup" class="page-section"><div style="max-width:400px;margin:80px auto" class="skill-category"><h2>Sign Up</h2><div style="margin:20px 0"><input type="text" id="s-name" class="form-control" placeholder="Name" style="margin-bottom:15px"><input type="email" id="s-email" class="form-control" placeholder="Email" style="margin-bottom:15px"><input type="password" id="s-pw" class="form-control" placeholder="Password"></div><button class="btn" style="width:100%" onclick="handleSignup()">가입하기</button></div></main>
 
-        <main id="view-signup" class="page-section">
-            <div class="auth-wrapper">
-                <div class="auth-card">
-                    <h2 class="auth-title">Create Account</h2>
-                    <div class="form-group"><label>Name</label><input type="text" id="signup-name" class="form-control"
-                            placeholder="이름을 입력하세요"></div>
-                    <div class="form-group"><label>Email</label><input type="email" id="signup-email"
-                            class="form-control" placeholder="사용할 이메일을 입력하세요"></div>
-                    <div class="form-group"><label>Password</label><input type="password" id="signup-password"
-                            class="form-control" placeholder="비밀번호 입력"></div>
-                    <div class="form-group"><label>Confirm Password</label><input type="password"
-                            id="signup-password-confirm" class="form-control" placeholder="비밀번호 재입력">
-                        <div id="signup-error" class="error-msg">비밀번호가 일치하지 않습니다.</div>
-                    </div>
-                    <button class="btn btn-full" onclick="handleSignup()">Sign Up</button>
-                    <div class="auth-footer">이미 계정이 있으신가요? <a onclick="navigate('login')">로그인 (Login)</a></div>
-                </div>
-            </div>
-        </main>
+        <!-- 3. Lists -->
+        <main id="view-board-list" class="page-section"><h2 class="section-title">Board</h2><div style="text-align:right"><button class="btn" onclick="checkAuthAndNavigate('board-write')">글쓰기</button></div><table class="board-table"><thead><tr><th>제목</th><th>작성자</th><th style="text-align:center">❤️</th><th style="text-align:center">💬</th></tr></thead><tbody id="board-tbody"></tbody></table></main>
+        <main id="view-study-list" class="page-section"><h2 class="section-title">Study Log</h2><div style="text-align:right"><button class="btn" onclick="checkAuthAndNavigate('study-write')">기록하기</button></div><table class="board-table"><thead><tr><th>주제</th><th>분야</th><th style="text-align:center">❤️</th><th style="text-align:center">💬</th></tr></thead><tbody id="study-tbody"></tbody></table></main>
 
-        <!-- ==========================================
-             3. 일반 게시판 (Board) 영역
-        =========================================== -->
-        <main id="view-board-list" class="page-section board-container">
-            <h2 class="section-title">Board</h2>
-            <div class="header-actions"><button class="btn" onclick="checkAuthAndNavigate('board-write')">글쓰기</button>
-            </div>
-            <table class="board-table">
-                <thead>
-                    <tr>
-                        <th style="width: 50%;">제목</th>
-                        <th>작성자</th>
-                        <th>작성일</th>
-                        <th>❤️</th>
-                        <th>💬</th>
-                    </tr>
-                </thead>
-                <tbody id="board-tbody"></tbody>
-            </table>
-        </main>
+        <!-- 4. Detail View -->
+        <main id="view-detail" class="page-section"><div class="skill-category" style="padding:3.5rem"><h3 id="d-title" style="font-size:2.8rem;margin-bottom:10px"></h3><div id="d-meta" style="color:var(--text-secondary);margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border-color)"></div><div id="d-content" style="background:var(--bg-color);padding:2.5rem;border-radius:12px;min-height:250px;white-space:pre-wrap;font-size:1.1rem"></div><div class="interaction-bar"><button id="l-btn" class="btn-like" onclick="handleToggleLike()">❤️ 좋아요 <span id="l-count">0</span></button></div><div class="comments-section"><h4 id="c-title" style="margin-bottom:1.5rem">댓글 0</h4><div id="c-list"></div><div style="display:flex;gap:15px;margin-top:2.5rem"><input type="text" id="c-input" class="form-control" placeholder="댓글을 입력하세요..."><button class="btn" onclick="handleAddComment()">등록</button></div></div><div style="margin-top:3rem;display:flex;gap:15px"><button class="btn btn-outline" id="b-back">목록으로</button><button class="btn btn-danger" id="b-del" style="display:none">삭제</button></div></div></main>
 
-        <main id="view-board-write" class="page-section board-container">
-            <h2 class="section-title">Write Post</h2>
-            <div class="board-form">
-                <div class="form-group"><label>제목</label><input type="text" id="post-title" class="form-control"
-                        placeholder="제목을 입력하세요"></div>
-                <div class="form-group"><label>작성자</label><input type="text" id="post-author" class="form-control"
-                        placeholder="이름을 입력하세요" readonly></div>
-                <div class="form-group"><label>내용</label><textarea id="post-content" class="form-control"
-                        placeholder="내용을 입력하세요"></textarea></div>
-                <div class="btn-group"><button class="btn btn-outline"
-                        onclick="navigate('board-list')">취소</button><button class="btn" onclick="savePost()">등록</button>
-                </div>
-            </div>
-        </main>
-
-        <main id="view-board-detail" class="page-section board-container">
-            <h2 class="section-title">View Post</h2>
-            <div class="board-detail-box">
-                <div class="detail-header">
-                    <h3 class="detail-title" id="detail-title"></h3>
-                    <div class="detail-info"><span id="detail-author"></span> | <span id="detail-date"></span></div>
-                </div>
-                <div class="detail-content" id="detail-content"></div>
-
-                <!-- 🔥 좋아요 버튼 영역 -->
-                <div class="interaction-bar">
-                    <button id="board-like-btn" class="btn-like" onclick="toggleLike('board')">
-                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                        좋아요 <span id="board-like-count">0</span>
-                    </button>
-                </div>
-
-                <!-- 🔥 댓글 영역 -->
-                <div class="comments-section">
-                    <div class="comments-title">💬 댓글 <span id="board-comment-count" style="color: var(--accent-color)">0</span></div>
-                    <div id="board-comments-list"></div>
-                    <div class="comment-input-group">
-                        <input type="text" id="board-comment-input" class="form-control" placeholder="댓글을 입력하세요" onkeyup="if(event.key==='Enter') addComment('board')">
-                        <button class="btn" onclick="addComment('board')">등록</button>
-                    </div>
-                </div>
-
-                <div class="btn-group" style="margin-top: 3rem;">
-                    <button class="btn btn-outline" onclick="navigate('board-list')">목록으로</button>
-                    <button class="btn btn-danger" id="board-delete-btn" style="display:none;" onclick="deleteDocData('board')">삭제</button>
-                </div>
-            </div>
-        </main>
-
-        <!-- ==========================================
-             4. Study (공부한 내용) 영역
-        =========================================== -->
-        <main id="view-study-list" class="page-section board-container">
-            <h2 class="section-title">Study Log</h2>
-            <div class="header-actions"><button class="btn" onclick="checkAuthAndNavigate('study-write')">학습
-                    기록하기</button></div>
-            <table class="board-table">
-                <thead>
-                    <tr>
-                        <th style="width: 40%;">학습 주제</th>
-                        <th>카테고리</th>
-                        <th>작성일</th>
-                        <th>❤️</th>
-                        <th>💬</th>
-                    </tr>
-                </thead>
-                <tbody id="study-tbody"></tbody>
-            </table>
-        </main>
-
-        <main id="view-study-write" class="page-section board-container">
-            <h2 class="section-title">Record Study</h2>
-            <div class="board-form">
-                <div class="form-group"><label>학습 주제 (제목)</label><input type="text" id="study-title"
-                        class="form-control" placeholder="예: 비동기 처리와 Promise"></div>
-                <div class="form-group"><label>카테고리 (분야)</label><input type="text" id="study-category"
-                        class="form-control" placeholder="예: JavaScript"></div>
-                <div class="form-group"><label>작성자</label><input type="text" id="study-author" class="form-control"
-                        placeholder="이름을 입력하세요" readonly></div>
-                <div class="form-group">
-                    <label>학습 내용 (💡 마크다운 문법 지원! 백틱(```) 3개로 코드를 감싸면 예쁘게 출력됩니다.)</label>
-                    <textarea id="study-content" class="form-control"
-                        placeholder="## 오늘 배운 내용&#10;&#10;```javascript&#10;const hello = 'world';&#10;```"></textarea>
-                </div>
-                <div class="btn-group"><button class="btn btn-outline"
-                        onclick="navigate('study-list')">취소</button><button class="btn"
-                        onclick="saveStudy()">저장</button></div>
-            </div>
-        </main>
-
-        <main id="view-study-detail" class="page-section board-container">
-            <h2 class="section-title">Study Detail</h2>
-            <div class="board-detail-box">
-                <div class="detail-header">
-                    <h3 class="detail-title" id="study-detail-title"></h3>
-                    <div class="detail-info"><span id="study-detail-category" class="category-badge"></span><span
-                            id="study-detail-author"></span> | <span id="study-detail-date"></span></div>
-                </div>
-                <div class="detail-content" id="study-detail-content"></div>
-
-                <!-- 🔥 좋아요 버튼 영역 (Study) -->
-                <div class="interaction-bar">
-                    <button id="study-like-btn" class="btn-like" onclick="toggleLike('study')">
-                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                        좋아요 <span id="study-like-count">0</span>
-                    </button>
-                </div>
-
-                <!-- 🔥 댓글 영역 (Study) -->
-                <div class="comments-section">
-                    <div class="comments-title">💬 댓글 <span id="study-comment-count" style="color: var(--accent-color)">0</span></div>
-                    <div id="study-comments-list"></div>
-                    <div class="comment-input-group">
-                        <input type="text" id="study-comment-input" class="form-control" placeholder="질문이나 의견을 남겨보세요" onkeyup="if(event.key==='Enter') addComment('study')">
-                        <button class="btn" onclick="addComment('study')">등록</button>
-                    </div>
-                </div>
-
-                <div class="btn-group" style="margin-top: 3rem;">
-                    <button class="btn btn-outline" onclick="navigate('study-list')">목록으로</button>
-                    <button class="btn btn-danger" id="study-delete-btn" style="display:none;" onclick="deleteDocData('study')">삭제</button>
-                </div>
-            </div>
-        </main>
-
+        <!-- 5. Write View -->
+        <main id="view-board-write" class="page-section"><h2 class="section-title">New Post</h2><div class="skill-category"><div style="margin-bottom:15px"><input type="text" id="wt-title" class="form-control" placeholder="제목"></div><textarea id="wt-content" class="form-control" placeholder="내용" style="min-height:350px"></textarea><div style="margin-top:25px;text-align:right"><button class="btn" onclick="savePost('board')">등록</button></div></div></main>
+        <main id="view-study-write" class="page-section"><h2 class="section-title">Record Study</h2><div class="skill-category"><div style="margin-bottom:15px"><input type="text" id="ws-title" class="form-control" placeholder="주제" style="margin-bottom:10px"><input type="text" id="ws-cat" class="form-control" placeholder="카테고리"></div><textarea id="ws-content" class="form-control" placeholder="내용 (마크다운)" style="min-height:350px"></textarea><div style="margin-top:25px;text-align:right"><button class="btn" onclick="savePost('study')">저장</button></div></div></main>
     </div>
 
-    <!-- 외부 라이브러리 (마크다운 파서 및 하이라이트) -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-
-    <!-- 🌟 Firebase 연동 및 핵심 로직 -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getFirestore, collection, addDoc, getDocs, doc, getDoc, updateDoc, deleteDoc, query, orderBy, onSnapshot, arrayUnion, arrayRemove, where } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        // 사용자의 Firebase 설정 적용
-        const firebaseConfig = {
-            apiKey: "AIzaSyCsGqNQxN3J0_WuRcJH93e61h13c83qvKw",
-            authDomain: "portfolio-6e74b.firebaseapp.com",
-            projectId: "portfolio-6e74b",
-            storageBucket: "portfolio-6e74b.firebasestorage.app",
-            messagingSenderId: "306050364029",
-            appId: "1:306050364029:web:1f7e19c84419cc605f7714",
-            measurementId: "G-B85SYG4YZ8"
+        const conf = { apiKey: "AIzaSyCsGqNQxN3J0_WuRcJH93e61h13c83qvKw", authDomain: "portfolio-6e74b.firebaseapp.com", projectId: "portfolio-6e74b", storageBucket: "portfolio-6e74b.firebasestorage.app", messagingSenderId: "306050364029", appId: "1:306050364029:web:1f7e19c84419cc605f7714" };
+        const app = initializeApp(conf); const db = getFirestore(app);
+        let curType = '', curId = '', unsub = null;
+
+        const getUser = () => JSON.parse(localStorage.getItem('portfolio_user'));
+        const esc = (s) => String(s).replace(/[&<>'"]/g, t => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[t]));
+        
+        window.navigate = (id, skip = false) => {
+            if(!skip && unsub) { unsub(); unsub = null; }
+            document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+            document.getElementById('view-' + id).classList.add('active');
+            window.scrollTo(0,0);
+            if(id === 'board-list') fetchList('board'); if(id === 'study-list') fetchList('study');
+            renderHeader();
         };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+        window.checkAuthAndNavigate = (id) => { if(!getUser()) return alert("로그인이 필요합니다."); window.navigate(id); };
 
-        // 마크다운 하이라이트 설정
-        marked.setOptions({
-            highlight: function (code, lang) {
-                const language = hljs.getLanguage(lang) ? lang : 'plaintext';
-                return hljs.highlight(code, { language }).value;
-            }, langPrefix: 'hljs language-'
-        });
+        window.handleSignup = async () => {
+            const n = document.getElementById('s-name').value, e = document.getElementById('s-email').value, p = document.getElementById('s-pw').value;
+            if(!n || !e || !p) return alert("빈칸을 채워주세요.");
+            await addDoc(collection(db, "users"), { name: n, email: e, password: p });
+            alert("가입되었습니다!"); window.navigate('login');
+        };
+        window.handleLogin = async () => {
+            const e = document.getElementById('l-email').value, p = document.getElementById('l-pw').value;
+            const q = query(collection(db, "users"), where("email", "==", e), where("password", "==", p));
+            const s = await getDocs(q);
+            if(!s.empty) { localStorage.setItem('portfolio_user', JSON.stringify(s.docs[0].data())); window.navigate('home'); } else alert("정보 불일치");
+        };
+        window.handleLogout = () => { localStorage.removeItem('portfolio_user'); window.navigate('home'); };
 
-        const DB_CURRENT_USER = 'portfolio_current_user';
-        let currentDocId = null; 
-        let unsubscribeDetail = null; // 실시간 리스너 해제용
+        const renderHeader = () => {
+            const u = getUser(); const area = document.getElementById('header-auth-area');
+            area.innerHTML = u ? `<span>${u.name}님</span><a onclick="handleLogout()" style="margin-left:12px;color:var(--text-secondary);font-size:0.85rem">Logout</a>` : `<a onclick="navigate('login')" style="color:var(--accent-color)">Login</a>`;
+        };
 
-        /* ==========================================================
-           Auth 인증 (Firebase Firestore Users 컬렉션 사용)
-        ========================================================== */
-        function getCurrentUser() {
-            return JSON.parse(localStorage.getItem(DB_CURRENT_USER));
-        }
-        
-        window.renderHeaderAuth = function() {
-            const user = getCurrentUser();
-            const authArea = document.getElementById('header-auth-area');
-            if (user) {
-                authArea.innerHTML = `<span>${escapeHTML(user.name)}님</span> <a onclick="handleLogout()">Logout</a>`;
-            } else {
-                authArea.innerHTML = `<a class="login-btn" onclick="navigate('login')">Login</a>`;
-            }
-        }
-
-        window.handleSignup = async function() {
-            const name = document.getElementById('signup-name').value.trim();
-            const email = document.getElementById('signup-email').value.trim();
-            const pwd = document.getElementById('signup-password').value;
-            const pwdConfirm = document.getElementById('signup-password-confirm').value;
-            const errorMsg = document.getElementById('signup-error');
-
-            if (!name || !email || !pwd || !pwdConfirm) return alert("모든 항목을 입력해주세요.");
-            if (pwd !== pwdConfirm) { 
-                errorMsg.innerText = "비밀번호가 일치하지 않습니다."; 
-                errorMsg.style.display = "block"; 
-                return; 
-            }
-
-            // 이메일 중복 체크
-            const q = query(collection(db, "users"), where("email", "==", email));
-            const querySnapshot = await getDocs(q);
-            if (!querySnapshot.empty) { 
-                errorMsg.innerText = "이미 가입된 이메일입니다."; 
-                errorMsg.style.display = "block"; 
-                return; 
-            }
-
-            // Firestore에 회원 저장
-            await addDoc(collection(db, "users"), { name, email, password: pwd });
-            alert("회원가입 성공! 로그인해주세요."); 
-            errorMsg.style.display = "none"; 
-            navigate('login');
-        }
-
-        window.handleLogin = async function() {
-            const email = document.getElementById('login-email').value.trim();
-            const pwd = document.getElementById('login-password').value;
-            const errorMsg = document.getElementById('login-error');
-
-            if (!email || !pwd) return alert("이메일과 비밀번호를 입력해주세요.");
-
-            const q = query(collection(db, "users"), where("email", "==", email), where("password", "==", pwd));
-            const querySnapshot = await getDocs(q);
-
-            if (!querySnapshot.empty) {
-                const userDoc = querySnapshot.docs[0].data();
-                localStorage.setItem(DB_CURRENT_USER, JSON.stringify({ name: userDoc.name, email: userDoc.email }));
-                errorMsg.style.display = "none";
-                document.getElementById('login-email').value = ''; 
-                document.getElementById('login-password').value = '';
-                renderHeaderAuth(); 
-                navigate('home');
-            } else { 
-                errorMsg.style.display = "block"; 
-            }
-        }
-
-        window.handleLogout = function() { 
-            localStorage.removeItem(DB_CURRENT_USER); 
-            renderHeaderAuth(); 
-            alert("로그아웃 되었습니다."); 
-            navigate('home'); 
-        }
-
-        window.checkAuthAndNavigate = function(viewId) { 
-            if (!getCurrentUser()) { 
-                alert("로그인이 필요한 서비스입니다."); 
-                navigate('login'); 
-                return; 
-            } 
-            navigate(viewId); 
-        }
-
-        /* ==========================================================
-           Navigation
-        ========================================================== */
-        window.navigate = function(viewId) {
-            // 다른 페이지로 갈 때 실시간 리스너 끄기
-            if(unsubscribeDetail) { 
-                unsubscribeDetail(); 
-                unsubscribeDetail = null; 
-            }
-
-            document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
-            document.getElementById(`view-${viewId}`).classList.add('active');
-            
-            document.querySelectorAll('.nav-links a').forEach(el => el.classList.remove('active'));
-            if (viewId === 'home') document.getElementById('nav-home').classList.add('active');
-            else if (viewId.startsWith('board')) document.getElementById('nav-board').classList.add('active');
-            else if (viewId.startsWith('study')) document.getElementById('nav-study').classList.add('active');
-            
-            window.scrollTo(0, 0);
-
-            if (viewId === 'board-list') fetchList('board');
-            if (viewId === 'study-list') fetchList('study');
-
-            const user = getCurrentUser();
-            if (viewId === 'board-write' && user) document.getElementById('post-author').value = user.name;
-            if (viewId === 'study-write' && user) document.getElementById('study-author').value = user.name;
-        }
-
-        /* ==========================================================
-           게시판 & Study 공통 CRUD (Firestore 연동)
-        ========================================================== */
-        // 목록 조회
-        async function fetchList(colName) {
-            const tbody = document.getElementById(`${colName}-tbody`);
-            tbody.innerHTML = `<tr><td colspan="5" class="empty-row">데이터를 불러오는 중입니다...</td></tr>`;
-            
-            const q = query(collection(db, colName), orderBy("timestamp", "desc"));
-            const querySnapshot = await getDocs(q);
-            tbody.innerHTML = '';
-
-            if (querySnapshot.empty) {
-                tbody.innerHTML = `<tr><td colspan="5" class="empty-row">작성된 글이 없습니다.</td></tr>`;
-                return;
-            }
-
-            querySnapshot.forEach((doc) => {
-                const data = doc.data();
-                const likeCount = data.likedUsers ? data.likedUsers.length : 0;
-                const commentCount = data.comments ? data.comments.length : 0;
-                const tr = document.createElement('tr'); 
-                tr.onclick = () => viewDetail(colName, doc.id);
-                
-                if(colName === 'board') {
-                    tr.innerHTML = `
-                        <td>${escapeHTML(data.title)}</td>
-                        <td>${escapeHTML(data.author)}</td>
-                        <td>${data.date}</td>
-                        <td style="color:var(--heart-color)">❤️ ${likeCount}</td>
-                        <td>💬 ${commentCount}</td>
-                    `;
-                } else {
-                    tr.innerHTML = `
-                        <td>${escapeHTML(data.title)}</td>
-                        <td><span class="category-badge">${escapeHTML(data.category)}</span></td>
-                        <td>${data.date}</td>
-                        <td style="color:var(--heart-color)">❤️ ${likeCount}</td>
-                        <td>💬 ${commentCount}</td>
-                    `;
-                }
-                tbody.appendChild(tr);
+        async function fetchList(type) {
+            const b = document.getElementById(type + '-tbody'); b.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:3rem">로딩중...</td></tr>';
+            const s = await getDocs(query(collection(db, type), orderBy("ts", "desc")));
+            b.innerHTML = '';
+            if(s.empty) b.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:3rem">내용이 없습니다.</td></tr>';
+            s.forEach(d => {
+                const data = d.data(); const tr = document.createElement('tr');
+                tr.onclick = () => viewDetail(type, d.id);
+                const l = data.likes ? data.likes.length : 0; const c = data.comments ? data.comments.length : 0;
+                tr.innerHTML = type === 'board' ? `<td>${esc(data.title)}</td><td>${esc(data.author)}</td><td style="text-align:center">❤️ ${l}</td><td style="text-align:center">💬 ${c}</td>`
+                             : `<td>${esc(data.title)}</td><td><span class="category-badge">${esc(data.cat)}</span></td><td style="text-align:center">❤️ ${l}</td><td style="text-align:center">💬 ${c}</td>`;
+                b.appendChild(tr);
             });
         }
 
-        // 새 글 저장
-        window.savePost = async function() {
-            const title = document.getElementById('post-title').value.trim();
-            const author = document.getElementById('post-author').value;
-            const content = document.getElementById('post-content').value.trim();
-            
-            if (!title || !content) return alert('모든 항목을 입력해주세요.');
-            
-            await addDoc(collection(db, "board"), {
-                title, author, content, date: getTodayStr(), timestamp: Date.now(), email: getCurrentUser().email, likedUsers: [], comments: []
+        window.savePost = async (type) => {
+            const u = getUser();
+            const payload = type === 'board' ? { title: document.getElementById('wt-title').value, content: document.getElementById('wt-content').value }
+                                           : { title: document.getElementById('ws-title').value, content: document.getElementById('ws-content').value, cat: document.getElementById('ws-cat').value };
+            if(!payload.title || !payload.content) return alert("필수 입력란 확인");
+            await addDoc(collection(db, type), { ...payload, author: u.name, email: u.email, date: new Date().toISOString().split('T')[0], ts: Date.now(), likes: [], comments: [] });
+            window.navigate(type + '-list');
+        };
+
+        window.viewDetail = (type, id) => {
+            if(unsub) unsub();
+            curType = type; curId = id;
+            window.navigate('detail', true);
+            unsub = onSnapshot(doc(db, type, id), (s) => {
+                if(!s.exists()) return;
+                const d = s.data(); const u = getUser();
+                document.getElementById('d-title').innerText = d.title;
+                document.getElementById('d-meta').innerText = `${d.author} | ${d.date}`;
+                document.getElementById('d-content').innerHTML = type === 'study' ? marked.parse(d.content) : esc(d.content);
+                const lArr = d.likes || []; document.getElementById('l-count').innerText = lArr.length;
+                document.getElementById('l-btn').className = (u && lArr.includes(u.email)) ? 'btn-like liked' : 'btn-like';
+                const cArr = d.comments || []; const cArea = document.getElementById('c-list'); cArea.innerHTML = '';
+                cArr.forEach(c => { cArea.innerHTML += `<div class="comment-item"><div><span style="font-weight:800;color:var(--accent-color);margin-right:10px">${esc(c.author)}</span><span style="font-size:0.8rem;color:var(--text-secondary)">${c.date}</span></div><div style="margin-top:8px">${esc(c.text)}</div></div>`; });
+                document.getElementById('c-title').innerText = `댓글 ${cArr.length}`;
+                document.getElementById('b-del').style.display = (u && u.email === d.email) ? 'block' : 'none';
+                document.getElementById('b-back').onclick = () => window.navigate(type + '-list');
+                document.getElementById('b-del').onclick = async () => { if(confirm("삭제?")) { await deleteDoc(doc(db, type, id)); window.navigate(type + '-list'); } };
             });
-            document.getElementById('post-title').value = ''; 
-            document.getElementById('post-content').value = '';
-            navigate('board-list');
-        }
+            const inp = document.getElementById('c-input'); inp.onkeyup = (e) => { if(e.key === 'Enter') window.handleAddComment(); };
+        };
 
-        window.saveStudy = async function() {
-            const title = document.getElementById('study-title').value.trim();
-            const category = document.getElementById('study-category').value.trim();
-            const author = document.getElementById('study-author').value;
-            const content = document.getElementById('study-content').value;
-            
-            if (!title || !category || !content) return alert('모든 항목을 입력해주세요.');
-            
-            await addDoc(collection(db, "study"), {
-                title, category, author, content, date: getTodayStr(), timestamp: Date.now(), email: getCurrentUser().email, likedUsers: [], comments: []
-            });
-            document.getElementById('study-title').value = ''; 
-            document.getElementById('study-category').value = ''; 
-            document.getElementById('study-content').value = '';
-            navigate('study-list');
-        }
+        window.handleToggleLike = async () => {
+            const u = getUser(); if(!u) return alert("로그인 필요");
+            const ref = doc(db, curType, curId); const s = await getDoc(ref);
+            const lArr = s.data().likes || [];
+            await updateDoc(ref, { likes: lArr.includes(u.email) ? arrayRemove(u.email) : arrayUnion(u.email) });
+        };
 
-        // 상세조회 (🔥 실시간 onSnapshot 적용)
-        window.viewDetail = function(colName, id) {
-            currentDocId = id;
-            const prefix = colName === 'board' ? '' : 'study-';
-            const user = getCurrentUser();
+        window.handleAddComment = async () => {
+            const u = getUser(); const t = document.getElementById('c-input').value;
+            if(!u) return alert("로그인 필요"); if(!t) return;
+            await updateDoc(doc(db, curType, curId), { comments: arrayUnion({ author: u.name, text: t, date: new Date().toISOString().split('T')[0], ts: Date.now() }) });
+            document.getElementById('c-input').value = '';
+        };
 
-            // 실시간 데이터 감지
-            unsubscribeDetail = onSnapshot(doc(db, colName, id), (docSnap) => {
-                if (!docSnap.exists()) return;
-                const data = docSnap.data();
-                
-                document.getElementById(`${prefix}detail-title`).innerText = data.title;
-                document.getElementById(`${prefix}detail-author`).innerText = data.author;
-                document.getElementById(`${prefix}detail-date`).innerText = data.date;
-                if(colName === 'study') document.getElementById('study-detail-category').innerText = data.category;
-                
-                document.getElementById(`${prefix}detail-content`).innerHTML = colName === 'study' ? marked.parse(data.content) : escapeHTML(data.content);
-                
-                // 삭제 버튼 표시 여부
-                const delBtn = document.getElementById(`${colName}-delete-btn`);
-                if(user && data.email === user.email) delBtn.style.display = 'inline-block';
-                else delBtn.style.display = 'none';
-
-                // 좋아요 UI 업데이트
-                const likedUsers = data.likedUsers || [];
-                const likeBtn = document.getElementById(`${colName}-like-btn`);
-                document.getElementById(`${colName}-like-count`).innerText = likedUsers.length;
-                
-                if(user && likedUsers.includes(user.email)) likeBtn.classList.add('liked');
-                else likeBtn.classList.remove('liked');
-
-                // 댓글 UI 업데이트
-                const comments = data.comments || [];
-                document.getElementById(`${colName}-comment-count`).innerText = comments.length;
-                const commentsList = document.getElementById(`${colName}-comments-list`);
-                commentsList.innerHTML = '';
-                
-                if(comments.length === 0) {
-                    commentsList.innerHTML = '<p style="color:var(--text-secondary); text-align:center; padding: 1rem 0;">첫 번째 댓글을 남겨보세요!</p>';
-                }
-                
-                comments.forEach(c => {
-                    commentsList.innerHTML += `
-                        <div class="comment-item">
-                            <div class="comment-header">
-                                <span class="comment-author">${escapeHTML(c.author)}</span>
-                                <span class="comment-date">${c.date}</span>
-                            </div>
-                            <div class="comment-text">${escapeHTML(c.text)}</div>
-                        </div>
-                    `;
-                });
-            });
-
-            navigate(`${colName}-detail`);
-        }
-
-        // 삭제
-        window.deleteDocData = async function(colName) {
-            if (!confirm('정말로 삭제하시겠습니까?')) return;
-            await deleteDoc(doc(db, colName, currentDocId));
-            navigate(`${colName}-list`);
-        }
-
-        /* ==========================================================
-           🔥 좋아요 & 댓글 기능 로직
-        ========================================================== */
-        window.toggleLike = async function(colName) {
-            const user = getCurrentUser();
-            if(!user) return alert("로그인이 필요한 기능입니다.");
-            
-            const ref = doc(db, colName, currentDocId);
-            const snap = await getDoc(ref);
-            const likedUsers = snap.data().likedUsers || [];
-
-            if(likedUsers.includes(user.email)) {
-                await updateDoc(ref, { likedUsers: arrayRemove(user.email) });
-            } else {
-                await updateDoc(ref, { likedUsers: arrayUnion(user.email) });
-            }
-        }
-
-        window.addComment = async function(colName) {
-            const user = getCurrentUser();
-            if(!user) return alert("로그인이 필요한 기능입니다.");
-            
-            const inputEl = document.getElementById(`${colName}-comment-input`);
-            const text = inputEl.value.trim();
-            if(!text) return;
-
-            const newComment = {
-                id: Date.now().toString(),
-                author: user.name,
-                email: user.email,
-                text: text,
-                date: getTodayStr()
-            };
-
-            await updateDoc(doc(db, colName, currentDocId), { comments: arrayUnion(newComment) });
-            inputEl.value = ''; // 입력창 초기화
-        }
-
-        /* --- 공통 유틸리티 --- */
-        function getTodayStr() { 
-            const t = new Date(); 
-            return `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, '0')}-${String(t.getDate()).padStart(2, '0')}`; 
-        }
-        function escapeHTML(str) { 
-            return str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag])); 
-        }
-
-        /* ==========================================================
-           🌟 GitHub 지정 레포지토리 연동 로직
-        ========================================================== */
-        const GITHUB_USERNAME = 'Oohsha';
-
-        // 💡 지정한 6개의 레포지토리 목록
-        const TARGET_REPOS = [
-            'sns-frontend',
-            'sns-backend',
-            'M-talk',
-            'n-blog',
-            'ai-friend-chat',
-            'info'
-        ];
-
-        async function fetchGitHubProjects() {
+        const fetchGithub = async () => {
             const container = document.getElementById('github-projects-container');
+            const list = ['sns-frontend', 'sns-backend', 'M-talk', 'n-blog', 'ai-friend-chat', 'info'];
             try {
-                const promises = TARGET_REPOS.map(repoName =>
-                    fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${repoName}`)
-                        .then(res => res.ok ? res.json() : null)
-                        .catch(() => null)
-                );
-
-                const results = await Promise.all(promises);
-                const validRepos = results.filter(repo => repo !== null); 
-
+                const results = await Promise.all(list.map(n => fetch(`https://api.github.com/repos/Oohsha/${n}`).then(r => r.json())));
                 container.innerHTML = '';
+                results.forEach(r => { if(!r.name) return; container.innerHTML += `<a href="${r.html_url}" target="_blank" class="project-card"><h3 style="font-size:1.4rem;margin-bottom:10px">${r.name}</h3><p style="font-size:0.9rem;color:var(--text-secondary);margin-bottom:1.5rem;flex-grow:1">${r.description || 'No description'}</p><span class="category-badge" style="align-self:flex-start">${r.language || 'Project'}</span></a>`; });
+            } catch (e) { container.innerHTML = 'GitHub 데이터 로드 실패'; }
+        };
 
-                if (validRepos.length === 0) {
-                    container.innerHTML = '<p style="color: var(--text-secondary);">설정된 저장소를 찾을 수 없거나 이름을 확인해주세요.</p>';
-                    return;
-                }
-
-                validRepos.forEach(repo => {
-                    const card = document.createElement('a');
-                    card.href = repo.html_url;
-                    card.target = '_blank';
-                    card.className = 'project-card';
-                    card.innerHTML = `
-                        <h3 class="project-title">${escapeHTML(repo.name)}</h3>
-                        <p class="project-desc">${repo.description ? escapeHTML(repo.description) : '저장소 설명이 없습니다.'}</p>
-                        <div class="project-lang">
-                            ${repo.language ? `<span class="lang-badge">${repo.language}</span>` : ''}
-                        </div>
-                    `;
-                    container.appendChild(card);
-                });
-            } catch (error) {
-                container.innerHTML = `<p class="error-msg" style="display:block;">GitHub 데이터를 불러오는데 실패했습니다.</p>`;
-            }
-        }
-
-        /* --- 초기 실행 세팅 --- */
         window.onload = () => {
-            renderHeaderAuth();
-            fetchGitHubProjects(); 
-            
-            const observer = new IntersectionObserver((entries, obs) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                        if (entry.target.id === 'skills') {
-                            document.querySelectorAll('.skill-bar-fill').forEach(bar => {
-                                bar.style.width = bar.getAttribute('data-width');
-                            });
-                        }
-                        obs.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.2 });
-
-            document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+            renderHeader(); fetchGithub();
+            const obs = new IntersectionObserver((es) => { es.forEach(e => { if(e.isIntersecting) { e.target.classList.add('visible'); if(e.target.id === 'skills') document.querySelectorAll('.skill-bar-fill').forEach(b => { b.style.width = b.dataset.width; }); } }); }, { threshold: 0.1 });
+            document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
         };
     </script>
 </body>
-
 </html>
