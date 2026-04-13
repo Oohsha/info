@@ -26,7 +26,7 @@
         .skill-item { margin-bottom:1.5rem; } .skill-info { display:flex; justify-content:space-between; margin-bottom:0.5rem; font-size:0.9rem; color:var(--text-secondary); }
         .skill-bar-bg { width:100%; height:8px; background-color:#333; border-radius:4px; overflow:hidden; } .skill-bar-fill { height:100%; background:var(--accent-gradient); width:0; transition:width 1.5s ease; }
         .projects-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:2rem; }
-        .project-card { background-color:var(--surface-color); padding:2rem; border-radius:12px; border:1px solid var(--border-color); text-decoration:none; color:inherit; transition:0.3s; display:flex; flex-direction:column; } .project-card:hover { transform:translateY(-8px); border-color:var(--accent-color); }
+        .project-card { background-color:var(--surface-color); padding:2rem; border-radius:12px; border:1px solid var(--border-color); text-decoration:none; color:inherit; transition:0.3s; display:flex; flex-direction:column; min-height:220px; } .project-card:hover { transform:translateY(-8px); border-color:var(--accent-color); }
         .btn { display:inline-block; padding:0.8rem 2.5rem; background:var(--accent-gradient); color:white; font-weight:600; border-radius:30px; border:none; cursor:pointer; transition:0.3s; } .btn:hover { opacity:0.9; transform:scale(1.05); } .btn-outline { background:transparent; border:1px solid var(--accent-color); color:var(--accent-color); }
         .board-table { width:100%; border-collapse:collapse; background:var(--surface-color); border-radius:12px; overflow:hidden; margin-top:2rem; } .board-table th, .board-table td { padding:1.2rem; text-align:left; border-bottom:1px solid var(--border-color); } .board-table tbody tr:hover { background:var(--surface-hover); cursor:pointer; }
         .form-control { width:100%; padding:1rem; background:var(--bg-color); border:1px solid var(--border-color); color:white; border-radius:8px; font-family:inherit; }
@@ -50,20 +50,17 @@
     <div class="container">
         <!-- 1. Home -->
         <main id="view-home" class="page-section active">
-            <section id="hero" class="fade-in"><div class="hero-subtitle">Software Engineer</div><div class="hero-title">JungTaeHune<br><span>Creative Developer</span></div><p style="max-width:600px;color:var(--text-secondary);font-size:1.1rem">사용자 경험을 최우선으로 생각하는 개발자입니다.</p></section>
+            <section id="hero" class="fade-in"><div class="hero-subtitle">Software Engineer</div><div class="hero-title">JungTaeHune<br><span>Creative Developer</span></div><p style="max-width:600px;color:var(--text-secondary);font-size:1.1rem">Firebase와 실시간 통신하며 하트와 댓글 기능을 갖춘 풀스택 포트폴리오 사이트입니다.</p></section>
             
-            <!-- 기술 스택 섹션 복구 -->
             <section id="skills" class="fade-in">
                 <h2 class="section-title">Technical Skills</h2>
                 <div class="skills-grid">
-                    <div class="skill-category">
-                        <h3>Frontend</h3>
+                    <div class="skill-category"><h3>Frontend</h3>
                         <div class="skill-item"><div class="skill-info"><span>JavaScript (ES6+)</span><span>90%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-width="90%"></div></div></div>
                         <div class="skill-item"><div class="skill-info"><span>React.js / Next.js</span><span>85%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-width="85%"></div></div></div>
                         <div class="skill-item"><div class="skill-info"><span>TypeScript</span><span>75%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-width="75%"></div></div></div>
                     </div>
-                    <div class="skill-category">
-                        <h3>Backend & Tools</h3>
+                    <div class="skill-category"><h3>Backend & Tools</h3>
                         <div class="skill-item"><div class="skill-info"><span>Node.js / Firebase</span><span>85%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-width="85%"></div></div></div>
                         <div class="skill-item"><div class="skill-info"><span>Python</span><span>70%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-width="70%"></div></div></div>
                         <div class="skill-item"><div class="skill-info"><span>Java Spring</span><span>80%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-width="80%"></div></div></div>
@@ -71,25 +68,25 @@
                 </div>
             </section>
 
-            <section id="projects" class="fade-in"><h2 class="section-title">Featured Projects</h2><div class="projects-grid" id="github-projects-container">로딩중...</div></section>
+            <section id="projects" class="fade-in"><h2 class="section-title">Featured Projects</h2><div class="projects-grid" id="github-projects-container"></div></section>
             
             <section id="contact" class="fade-in"><h2 class="section-title">Contact</h2><div class="skill-category" style="text-align:center;padding:4rem"><p style="font-size:1.2rem;margin-bottom:2rem">새로운 프로젝트나 협업 제안은 언제나 환영입니다.</p><a href="mailto:sdh250415@sdh.hs.kr" class="btn">Send Email</a></div></section>
         </main>
 
         <!-- 2. Auth -->
-        <main id="view-login" class="page-section"><div style="max-width:400px;margin:80px auto" class="skill-category"><h2>Login</h2><div style="margin:20px 0"><input type="email" id="l-email" class="form-control" placeholder="Email" style="margin-bottom:15px"><input type="password" id="l-pw" class="form-control" placeholder="Password"></div><button class="btn" style="width:100%" onclick="handleLogin()">Login</button><p style="margin-top:20px;text-align:center">No account? <a onclick="navigate('signup')" style="color:var(--accent-color);cursor:pointer">Sign up</a></p></div></main>
-        <main id="view-signup" class="page-section"><div style="max-width:400px;margin:80px auto" class="skill-category"><h2>Sign Up</h2><div style="margin:20px 0"><input type="text" id="s-name" class="form-control" placeholder="Name" style="margin-bottom:15px"><input type="email" id="s-email" class="form-control" placeholder="Email" style="margin-bottom:15px"><input type="password" id="s-pw" class="form-control" placeholder="Password"></div><button class="btn" style="width:100%" onclick="handleSignup()">가입하기</button></div></main>
+        <main id="view-login" class="page-section"><div style="max-width:400px;margin:100px auto" class="skill-category"><h2>Login</h2><div style="margin:20px 0"><input type="email" id="l-email" class="form-control" placeholder="Email" style="margin-bottom:15px"><input type="password" id="l-pw" class="form-control" placeholder="Password"></div><button class="btn" style="width:100%" onclick="handleLogin()">Login</button><p style="margin-top:20px;text-align:center">No account? <a onclick="navigate('signup')" style="color:var(--accent-color);cursor:pointer;font-weight:600">회원가입</a></p></div></main>
+        <main id="view-signup" class="page-section"><div style="max-width:400px;margin:100px auto" class="skill-category"><h2>Sign Up</h2><div style="margin:20px 0"><input type="text" id="s-name" class="form-control" placeholder="Name" style="margin-bottom:15px"><input type="email" id="s-email" class="form-control" placeholder="Email" style="margin-bottom:15px"><input type="password" id="s-pw" class="form-control" placeholder="Password"></div><button class="btn" style="width:100%" onclick="handleSignup()">가입하기</button></div></main>
 
         <!-- 3. Lists -->
         <main id="view-board-list" class="page-section"><h2 class="section-title">Board</h2><div style="text-align:right"><button class="btn" onclick="checkAuthAndNavigate('board-write')">글쓰기</button></div><table class="board-table"><thead><tr><th>제목</th><th>작성자</th><th style="text-align:center">❤️</th><th style="text-align:center">💬</th></tr></thead><tbody id="board-tbody"></tbody></table></main>
         <main id="view-study-list" class="page-section"><h2 class="section-title">Study Log</h2><div style="text-align:right"><button class="btn" onclick="checkAuthAndNavigate('study-write')">기록하기</button></div><table class="board-table"><thead><tr><th>주제</th><th>분야</th><th style="text-align:center">❤️</th><th style="text-align:center">💬</th></tr></thead><tbody id="study-tbody"></tbody></table></main>
 
-        <!-- 4. Detail View -->
-        <main id="view-detail" class="page-section"><div class="skill-category" style="padding:3.5rem"><h3 id="d-title" style="font-size:2.8rem;margin-bottom:10px"></h3><div id="d-meta" style="color:var(--text-secondary);margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border-color)"></div><div id="d-content" style="background:var(--bg-color);padding:2.5rem;border-radius:12px;min-height:250px;white-space:pre-wrap;font-size:1.1rem"></div><div class="interaction-bar"><button id="l-btn" class="btn-like" onclick="handleToggleLike()">❤️ 좋아요 <span id="l-count">0</span></button></div><div class="comments-section"><h4 id="c-title" style="margin-bottom:1.5rem">댓글 0</h4><div id="c-list"></div><div style="display:flex;gap:15px;margin-top:2.5rem"><input type="text" id="c-input" class="form-control" placeholder="댓글을 입력하세요..."><button class="btn" onclick="handleAddComment()">등록</button></div></div><div style="margin-top:3rem;display:flex;gap:15px"><button class="btn btn-outline" id="b-back">목록으로</button><button class="btn btn-danger" id="b-del" style="display:none">삭제</button></div></div></main>
+        <!-- 4. Detail -->
+        <main id="view-detail" class="page-section"><div class="skill-category" style="padding:3.5rem"><h3 id="d-title" style="font-size:2.8rem;margin-bottom:10px;font-weight:800"></h3><div id="d-meta" style="color:var(--text-secondary);margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border-color)"></div><div id="d-content" style="background:var(--bg-color);padding:2.5rem;border-radius:12px;min-height:250px;white-space:pre-wrap;font-size:1.1rem"></div><div class="interaction-bar"><button id="l-btn" class="btn-like" onclick="handleToggleLike()">❤️ 좋아요 <span id="l-count">0</span></button></div><div class="comments-section"><h4 id="c-title" style="margin-bottom:1.5rem;font-size:1.3rem">댓글 0</h4><div id="c-list"></div><div style="display:flex;gap:15px;margin-top:2.5rem"><input type="text" id="c-input" class="form-control" placeholder="댓글을 입력하세요..."><button class="btn" onclick="handleAddComment()">등록</button></div></div><div style="margin-top:3rem;display:flex;gap:15px"><button class="btn btn-outline" id="b-back">목록으로</button><button class="btn btn-danger" id="b-del" style="display:none">삭제</button></div></div></main>
 
-        <!-- 5. Write View -->
+        <!-- 5. Write -->
         <main id="view-board-write" class="page-section"><h2 class="section-title">New Post</h2><div class="skill-category"><div style="margin-bottom:15px"><input type="text" id="wt-title" class="form-control" placeholder="제목"></div><textarea id="wt-content" class="form-control" placeholder="내용" style="min-height:350px"></textarea><div style="margin-top:25px;text-align:right"><button class="btn" onclick="savePost('board')">등록</button></div></div></main>
-        <main id="view-study-write" class="page-section"><h2 class="section-title">Record Study</h2><div class="skill-category"><div style="margin-bottom:15px"><input type="text" id="ws-title" class="form-control" placeholder="주제" style="margin-bottom:10px"><input type="text" id="ws-cat" class="form-control" placeholder="카테고리"></div><textarea id="ws-content" class="form-control" placeholder="내용 (마크다운)" style="min-height:350px"></textarea><div style="margin-top:25px;text-align:right"><button class="btn" onclick="savePost('study')">저장</button></div></div></main>
+        <main id="view-study-write" class="page-section"><h2 class="section-title">Record Study</h2><div class="skill-category"><div style="margin-bottom:15px"><input type="text" id="ws-title" class="form-control" placeholder="주제" style="margin-bottom:15px"><input type="text" id="ws-cat" class="form-control" placeholder="카테고리"></div><textarea id="ws-content" class="form-control" placeholder="내용 (마크다운)" style="min-height:350px"></textarea><div style="margin-top:25px;text-align:right"><button class="btn" onclick="savePost('study')">저장</button></div></div></main>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -118,9 +115,9 @@
 
         window.handleSignup = async () => {
             const n = document.getElementById('s-name').value, e = document.getElementById('s-email').value, p = document.getElementById('s-pw').value;
-            if(!n || !e || !p) return alert("빈칸을 채워주세요.");
+            if(!n || !e || !p) return alert("입력 필수");
             await addDoc(collection(db, "users"), { name: n, email: e, password: p });
-            alert("가입되었습니다!"); window.navigate('login');
+            alert("가입 완료"); window.navigate('login');
         };
         window.handleLogin = async () => {
             const e = document.getElementById('l-email').value, p = document.getElementById('l-pw').value;
@@ -154,7 +151,7 @@
             const u = getUser();
             const payload = type === 'board' ? { title: document.getElementById('wt-title').value, content: document.getElementById('wt-content').value }
                                            : { title: document.getElementById('ws-title').value, content: document.getElementById('ws-content').value, cat: document.getElementById('ws-cat').value };
-            if(!payload.title || !payload.content) return alert("필수 입력란 확인");
+            if(!payload.title || !payload.content) return alert("모든 항목을 채워주세요.");
             await addDoc(collection(db, type), { ...payload, author: u.name, email: u.email, date: new Date().toISOString().split('T')[0], ts: Date.now(), likes: [], comments: [] });
             window.navigate(type + '-list');
         };
@@ -195,6 +192,20 @@
             document.getElementById('c-input').value = '';
         };
 
+        // 🌟 Study 더미 데이터 자동 생성 함수
+        async function seedDummyData() {
+            const q = await getDocs(collection(db, "study"));
+            if (!q.empty) return; // 이미 데이터가 있으면 중지
+            const dummy = [
+                { title: "Firebase Firestore 실시간 리스너 활용", cat: "Backend", author: "정태훈", email: "sdh250415@sdh.hs.kr", content: "## 실시간 데이터베이스 이해\nonSnapshot을 활용하면 DB가 업데이트될 때 새로고침 없이 화면을 바꿀 수 있습니다.\n\n```javascript\nonSnapshot(doc(db, 'study', id), (s) => {\n  console.log(s.data());\n});\n```", date: "2024-04-10", ts: Date.now() - 3000, likes: [], comments: [] },
+                { title: "React SPA 라우팅의 원리", cat: "Frontend", author: "정태훈", email: "sdh250415@sdh.hs.kr", content: "## SPA란?\nSingle Page Application은 서버로부터 새 페이지를 불러오지 않고 자바스크립트로 화면만 바꿉니다.\n이번 프로젝트에서도 `navigate()` 함수를 직접 만들어 적용해 보았습니다.", date: "2024-04-11", ts: Date.now() - 2000, likes: [], comments: [] },
+                { title: "마크다운 Marked.js 라이브러리 적용기", cat: "Library", author: "정태훈", email: "sdh250415@sdh.hs.kr", content: "## Markdown 적용\n사용자가 작성한 텍스트를 HTML로 변환하기 위해 Marked.js를 사용했습니다.\n덕분에 노션처럼 깔끔한 코드 블록 구현이 가능해졌습니다.", date: "2024-04-12", ts: Date.now() - 1000, likes: [], comments: [] },
+                { title: "좋아요와 댓글 기능 로직 설계", cat: "Feature", author: "정태훈", email: "sdh250415@sdh.hs.kr", content: "## Interaction 설계\nFirebase의 `arrayUnion`과 `arrayRemove`를 사용하여 중복 없는 좋아요 기능을 구현했습니다.\n댓글은 객체 배열 형태로 저장하여 관리합니다.", date: "2024-04-13", ts: Date.now(), likes: [], comments: [] }
+            ];
+            for (const d of dummy) { await addDoc(collection(db, "study"), d); }
+            fetchList('study');
+        }
+
         const fetchGithub = async () => {
             const container = document.getElementById('github-projects-container');
             const list = ['sns-frontend', 'sns-backend', 'M-talk', 'n-blog', 'ai-friend-chat', 'info'];
@@ -206,7 +217,7 @@
         };
 
         window.onload = () => {
-            renderHeader(); fetchGithub();
+            renderHeader(); fetchGithub(); seedDummyData();
             const obs = new IntersectionObserver((es) => { es.forEach(e => { if(e.isIntersecting) { e.target.classList.add('visible'); if(e.target.id === 'skills') document.querySelectorAll('.skill-bar-fill').forEach(b => { b.style.width = b.dataset.width; }); } }); }, { threshold: 0.1 });
             document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
         };
