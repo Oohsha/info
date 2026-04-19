@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <style>
-        :root { --bg-color:#0a0a0a; --surface-color:#1a1a1a; --surface-hover:#2a2a2a; --text-primary:#ffffff; --text-secondary:#a1a1aa; --border-color:rgba(255,255,255,0.1); --accent-color:#3b82f6; --heart-color:#f43f5e; --accent-gradient:linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); }
+        :root { --bg-color:#0a0a0a; --surface-color:#1a1a1a; --surface-hover:#2a2a2a; --text-primary:#ffffff; --text-secondary:#a1a1aa; --border-color:rgba(255,255,255,0.1); --accent-color:#3b82f6; --heart-color:#f43f5e; --accent-gradient:linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); --danger-color:#ef4444; }
         * { margin:0; padding:0; box-sizing:border-box; }
         body { font-family:'Pretendard', sans-serif; background-color:var(--bg-color); color:var(--text-primary); line-height:1.6; overflow-x:hidden; scroll-behavior:smooth; }
         header { position:fixed; top:0; width:100%; background:rgba(10,10,10,0.8); backdrop-filter:blur(10px); border-bottom:1px solid var(--border-color); z-index:1000; }
@@ -28,6 +28,8 @@
         .projects-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:2rem; }
         .project-card { background-color:var(--surface-color); padding:2rem; border-radius:12px; border:1px solid var(--border-color); text-decoration:none; color:inherit; transition:0.3s; display:flex; flex-direction:column; min-height:220px; } .project-card:hover { transform:translateY(-8px); border-color:var(--accent-color); }
         .btn { display:inline-block; padding:0.8rem 2.5rem; background:var(--accent-gradient); color:white; font-weight:600; border-radius:30px; border:none; cursor:pointer; transition:0.3s; } .btn:hover { opacity:0.9; transform:scale(1.05); } .btn-outline { background:transparent; border:1px solid var(--accent-color); color:var(--accent-color); }
+        .btn-danger { background:var(--danger-color); color:white; border:none; }
+        .btn-edit { background:transparent; border:1px solid #f59e0b; color:#f59e0b; padding:0.8rem 2.5rem; border-radius:30px; cursor:pointer; font-weight:600; transition:0.3s; } .btn-edit:hover { background:#f59e0b; color:#000; }
         .board-table { width:100%; border-collapse:collapse; background:var(--surface-color); border-radius:12px; overflow:hidden; margin-top:2rem; } .board-table th, .board-table td { padding:1.2rem; text-align:left; border-bottom:1px solid var(--border-color); } .board-table tbody tr:hover { background:var(--surface-hover); cursor:pointer; }
         .form-control { width:100%; padding:1rem; background:var(--bg-color); border:1px solid var(--border-color); color:white; border-radius:8px; font-family:inherit; }
         .interaction-bar { margin:2rem 0; padding:1rem 0; border-top:1px solid var(--border-color); border-bottom:1px solid var(--border-color); }
@@ -35,6 +37,7 @@
         .comment-item { padding:1.2rem; background:rgba(255,255,255,0.03); border-radius:8px; margin-bottom:1rem; border-left:4px solid var(--accent-color); }
         .category-badge { padding:0.2rem 0.8rem; background:rgba(139,92,246,0.2); color:#c4b5fd; border-radius:20px; font-size:0.85rem; }
         .fade-in { opacity:0; transform:translateY(30px); transition:0.8s ease; } .fade-in.visible { opacity:1; transform:translateY(0); }
+        .action-buttons { margin-top:3rem; display:flex; gap:15px; flex-wrap:wrap; }
     </style>
 </head>
 <body>
@@ -82,11 +85,21 @@
         <main id="view-study-list" class="page-section"><h2 class="section-title">Study Log</h2><div style="text-align:right"><button class="btn" onclick="checkAuthAndNavigate('study-write')">기록하기</button></div><table class="board-table"><thead><tr><th>주제</th><th>분야</th><th style="text-align:center">❤️</th><th style="text-align:center">💬</th></tr></thead><tbody id="study-tbody"></tbody></table></main>
 
         <!-- 4. Detail -->
-        <main id="view-detail" class="page-section"><div class="skill-category" style="padding:3.5rem"><h3 id="d-title" style="font-size:2.8rem;margin-bottom:10px;font-weight:800"></h3><div id="d-meta" style="color:var(--text-secondary);margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border-color)"></div><div id="d-content" style="background:var(--bg-color);padding:2.5rem;border-radius:12px;min-height:250px;white-space:pre-wrap;font-size:1.1rem"></div><div class="interaction-bar"><button id="l-btn" class="btn-like" onclick="handleToggleLike()">❤️ 좋아요 <span id="l-count">0</span></button></div><div class="comments-section"><h4 id="c-title" style="margin-bottom:1.5rem;font-size:1.3rem">댓글 0</h4><div id="c-list"></div><div style="display:flex;gap:15px;margin-top:2.5rem"><input type="text" id="c-input" class="form-control" placeholder="댓글을 입력하세요..."><button class="btn" onclick="handleAddComment()">등록</button></div></div><div style="margin-top:3rem;display:flex;gap:15px"><button class="btn btn-outline" id="b-back">목록으로</button><button class="btn btn-danger" id="b-del" style="display:none">삭제</button></div></div></main>
+        <main id="view-detail" class="page-section"><div class="skill-category" style="padding:3.5rem"><h3 id="d-title" style="font-size:2.8rem;margin-bottom:10px;font-weight:800"></h3><div id="d-meta" style="color:var(--text-secondary);margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border-color)"></div><div id="d-content" style="background:var(--bg-color);padding:2.5rem;border-radius:12px;min-height:250px;white-space:pre-wrap;font-size:1.1rem"></div><div class="interaction-bar"><button id="l-btn" class="btn-like" onclick="handleToggleLike()">❤️ 좋아요 <span id="l-count">0</span></button></div><div class="comments-section"><h4 id="c-title" style="margin-bottom:1.5rem;font-size:1.3rem">댓글 0</h4><div id="c-list"></div><div style="display:flex;gap:15px;margin-top:2.5rem"><input type="text" id="c-input" class="form-control" placeholder="댓글을 입력하세요..."><button class="btn" onclick="handleAddComment()">등록</button></div></div>
+        <div class="action-buttons">
+            <button class="btn btn-outline" id="b-back">목록으로</button>
+            <button class="btn-edit" id="b-edit" style="display:none" onclick="handleEdit()">수정</button>
+            <button class="btn btn-danger" id="b-del" style="display:none" onclick="handleDelete()">삭제</button>
+        </div>
+        </div></main>
 
         <!-- 5. Write -->
         <main id="view-board-write" class="page-section"><h2 class="section-title">New Post</h2><div class="skill-category"><div style="margin-bottom:15px"><input type="text" id="wt-title" class="form-control" placeholder="제목"></div><textarea id="wt-content" class="form-control" placeholder="내용" style="min-height:350px"></textarea><div style="margin-top:25px;text-align:right"><button class="btn" onclick="savePost('board')">등록</button></div></div></main>
         <main id="view-study-write" class="page-section"><h2 class="section-title">Record Study</h2><div class="skill-category"><div style="margin-bottom:15px"><input type="text" id="ws-title" class="form-control" placeholder="주제" style="margin-bottom:15px"><input type="text" id="ws-cat" class="form-control" placeholder="카테고리"></div><textarea id="ws-content" class="form-control" placeholder="내용 (마크다운)" style="min-height:350px"></textarea><div style="margin-top:25px;text-align:right"><button class="btn" onclick="savePost('study')">저장</button></div></div></main>
+
+        <!-- 6. Edit (수정 페이지 추가) -->
+        <main id="view-board-edit" class="page-section"><h2 class="section-title">Edit Post</h2><div class="skill-category"><div style="margin-bottom:15px"><input type="text" id="et-title" class="form-control" placeholder="제목"></div><textarea id="et-content" class="form-control" placeholder="내용" style="min-height:350px"></textarea><div style="margin-top:25px;display:flex;justify-content:flex-end;gap:15px"><button class="btn btn-outline" onclick="navigate('detail', true)">취소</button><button class="btn" onclick="updatePost('board')">수정 완료</button></div></div></main>
+        <main id="view-study-edit" class="page-section"><h2 class="section-title">Edit Study</h2><div class="skill-category"><div style="margin-bottom:15px"><input type="text" id="es-title" class="form-control" placeholder="주제" style="margin-bottom:15px"><input type="text" id="es-cat" class="form-control" placeholder="카테고리"></div><textarea id="es-content" class="form-control" placeholder="내용 (마크다운)" style="min-height:350px"></textarea><div style="margin-top:25px;display:flex;justify-content:flex-end;gap:15px"><button class="btn btn-outline" onclick="navigate('detail', true)">취소</button><button class="btn" onclick="updatePost('study')">수정 완료</button></div></div></main>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -171,11 +184,63 @@
                 const cArr = d.comments || []; const cArea = document.getElementById('c-list'); cArea.innerHTML = '';
                 cArr.forEach(c => { cArea.innerHTML += `<div class="comment-item"><div><span style="font-weight:800;color:var(--accent-color);margin-right:10px">${esc(c.author)}</span><span style="font-size:0.8rem;color:var(--text-secondary)">${c.date}</span></div><div style="margin-top:8px">${esc(c.text)}</div></div>`; });
                 document.getElementById('c-title').innerText = `댓글 ${cArr.length}`;
-                document.getElementById('b-del').style.display = (u && u.email === d.email) ? 'block' : 'none';
+
+                // 본인 글일 때만 수정/삭제 버튼 표시
+                const isOwner = u && u.email === d.email;
+                document.getElementById('b-edit').style.display = isOwner ? 'inline-block' : 'none';
+                document.getElementById('b-del').style.display = isOwner ? 'inline-block' : 'none';
                 document.getElementById('b-back').onclick = () => window.navigate(type + '-list');
-                document.getElementById('b-del').onclick = async () => { if(confirm("삭제?")) { await deleteDoc(doc(db, type, id)); window.navigate(type + '-list'); } };
             });
             const inp = document.getElementById('c-input'); inp.onkeyup = (e) => { if(e.key === 'Enter') window.handleAddComment(); };
+        };
+
+        // 🗑️ 삭제 - window에 명시적으로 노출 (module scope 버그 수정)
+        window.handleDelete = async () => {
+            if(!confirm("정말 삭제하시겠습니까?")) return;
+            const type = curType, id = curId;
+            // 리스너를 먼저 해제하고 삭제 → onSnapshot이 삭제 이벤트를 받아 오작동하는 것 방지
+            if(unsub) { unsub(); unsub = null; }
+            await deleteDoc(doc(db, type, id));
+            window.navigate(type + '-list');
+        };
+
+        // ✏️ 수정 페이지 열기 - 현재 내용 미리 채워넣기
+        window.handleEdit = async () => {
+            const s = await getDoc(doc(db, curType, curId));
+            if(!s.exists()) return;
+            const d = s.data();
+
+            if(curType === 'board') {
+                document.getElementById('et-title').value = d.title;
+                document.getElementById('et-content').value = d.content;
+                window.navigate('board-edit', true);
+            } else {
+                document.getElementById('es-title').value = d.title;
+                document.getElementById('es-cat').value = d.cat || '';
+                document.getElementById('es-content').value = d.content;
+                window.navigate('study-edit', true);
+            }
+        };
+
+        // ✏️ 수정 내용 저장
+        window.updatePost = async (type) => {
+            let payload;
+            if(type === 'board') {
+                const title = document.getElementById('et-title').value;
+                const content = document.getElementById('et-content').value;
+                if(!title || !content) return alert("모든 항목을 채워주세요.");
+                payload = { title, content };
+            } else {
+                const title = document.getElementById('es-title').value;
+                const content = document.getElementById('es-content').value;
+                const cat = document.getElementById('es-cat').value;
+                if(!title || !content) return alert("모든 항목을 채워주세요.");
+                payload = { title, content, cat };
+            }
+            await updateDoc(doc(db, curType, curId), payload);
+            alert("수정 완료!");
+            // 상세 페이지로 돌아가기 (실시간 반영)
+            viewDetail(curType, curId);
         };
 
         window.handleToggleLike = async () => {
@@ -195,7 +260,7 @@
         // 🌟 Study 더미 데이터 자동 생성 함수
         async function seedDummyData() {
             const q = await getDocs(collection(db, "study"));
-            if (!q.empty) return; // 이미 데이터가 있으면 중지
+            if (!q.empty) return;
             const dummy = [
                 { title: "Firebase Firestore 실시간 리스너 활용", cat: "Backend", author: "정태훈", email: "sdh250415@sdh.hs.kr", content: "## 실시간 데이터베이스 이해\nonSnapshot을 활용하면 DB가 업데이트될 때 새로고침 없이 화면을 바꿀 수 있습니다.\n\n```javascript\nonSnapshot(doc(db, 'study', id), (s) => {\n  console.log(s.data());\n});\n```", date: "2024-04-10", ts: Date.now() - 3000, likes: [], comments: [] },
                 { title: "React SPA 라우팅의 원리", cat: "Frontend", author: "정태훈", email: "sdh250415@sdh.hs.kr", content: "## SPA란?\nSingle Page Application은 서버로부터 새 페이지를 불러오지 않고 자바스크립트로 화면만 바꿉니다.\n이번 프로젝트에서도 `navigate()` 함수를 직접 만들어 적용해 보았습니다.", date: "2024-04-11", ts: Date.now() - 2000, likes: [], comments: [] },
