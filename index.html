@@ -38,6 +38,13 @@
         .category-badge { padding:0.2rem 0.8rem; background:rgba(139,92,246,0.2); color:#c4b5fd; border-radius:20px; font-size:0.85rem; }
         .fade-in { opacity:0; transform:translateY(30px); transition:0.8s ease; } .fade-in.visible { opacity:1; transform:translateY(0); }
         .action-buttons { margin-top:3rem; display:flex; gap:15px; flex-wrap:wrap; }
+        .comment-actions { display:flex; gap:8px; margin-top:8px; }
+        .btn-comment-act { background:transparent; border:none; cursor:pointer; font-size:0.78rem; padding:2px 8px; border-radius:12px; font-weight:600; transition:0.2s; }
+        .btn-comment-edit { color:#f59e0b; border:1px solid #f59e0b; } .btn-comment-edit:hover { background:#f59e0b; color:#000; }
+        .btn-comment-del { color:var(--heart-color); border:1px solid var(--heart-color); } .btn-comment-del:hover { background:var(--heart-color); color:#fff; }
+        .comment-edit-area { margin-top:10px; display:flex; gap:10px; } .comment-edit-area input { flex:1; padding:0.5rem 0.8rem; background:var(--bg-color); border:1px solid var(--accent-color); color:white; border-radius:8px; font-family:inherit; font-size:0.9rem; }
+        .btn-comment-save { background:var(--accent-gradient); color:white; border:none; padding:0.5rem 1rem; border-radius:8px; cursor:pointer; font-weight:600; font-size:0.85rem; }
+        .btn-comment-cancel { background:transparent; color:var(--text-secondary); border:1px solid var(--border-color); padding:0.5rem 1rem; border-radius:8px; cursor:pointer; font-size:0.85rem; }
     </style>
 </head>
 <body>
@@ -182,7 +189,11 @@
                 const lArr = d.likes || []; document.getElementById('l-count').innerText = lArr.length;
                 document.getElementById('l-btn').className = (u && lArr.includes(u.email)) ? 'btn-like liked' : 'btn-like';
                 const cArr = d.comments || []; const cArea = document.getElementById('c-list'); cArea.innerHTML = '';
-                cArr.forEach(c => { cArea.innerHTML += `<div class="comment-item"><div><span style="font-weight:800;color:var(--accent-color);margin-right:10px">${esc(c.author)}</span><span style="font-size:0.8rem;color:var(--text-secondary)">${c.date}</span></div><div style="margin-top:8px">${esc(c.text)}</div></div>`; });
+                cArr.forEach((c, idx) => {
+                    const isMyComment = u && u.email === c.email;
+                    const actBtns = isMyComment ? `<div class="comment-actions"><button class="btn-comment-act btn-comment-edit" onclick="handleCommentEdit(${idx})">수정</button><button class="btn-comment-act btn-comment-del" onclick="handleCommentDelete(${idx})">삭제</button></div>` : '';
+                    cArea.innerHTML += `<div class="comment-item" id="comment-${idx}"><div style="display:flex;justify-content:space-between;align-items:center"><div><span style="font-weight:800;color:var(--accent-color);margin-right:10px">${esc(c.author)}</span><span style="font-size:0.8rem;color:var(--text-secondary)">${c.date}</span></div>${actBtns}</div><div style="margin-top:8px" id="comment-text-${idx}">${esc(c.text)}</div></div>`;
+                });
                 document.getElementById('c-title').innerText = `댓글 ${cArr.length}`;
 
                 // 본인 글일 때만 수정/삭제 버튼 표시
@@ -253,8 +264,43 @@
         window.handleAddComment = async () => {
             const u = getUser(); const t = document.getElementById('c-input').value;
             if(!u) return alert("로그인 필요"); if(!t) return;
-            await updateDoc(doc(db, curType, curId), { comments: arrayUnion({ author: u.name, text: t, date: new Date().toISOString().split('T')[0], ts: Date.now() }) });
+            // email 필드 추가 → 댓글 본인 판별에 사용
+            await updateDoc(doc(db, curType, curId), { comments: arrayUnion({ author: u.name, email: u.email, text: t, date: new Date().toISOString().split('T')[0], ts: Date.now() }) });
             document.getElementById('c-input').value = '';
+        };
+
+        // 💬 댓글 삭제
+        window.handleCommentDelete = async (idx) => {
+            if(!confirm("댓글을 삭제하시겠습니까?")) return;
+            const ref = doc(db, curType, curId);
+            const s = await getDoc(ref);
+            const comments = [...(s.data().comments || [])];
+            comments.splice(idx, 1);
+            await updateDoc(ref, { comments });
+        };
+
+        // 💬 댓글 수정 - 인라인 입력창으로 교체
+        window.handleCommentEdit = (idx) => {
+            const textEl = document.getElementById(`comment-text-${idx}`);
+            const curText = textEl.innerText;
+            textEl.innerHTML = `<div class="comment-edit-area"><input id="cedit-${idx}" value="${esc(curText)}"><button class="btn-comment-save" onclick="handleCommentSave(${idx})">저장</button><button class="btn-comment-cancel" onclick="handleCommentCancel(${idx}, '${esc(curText)}')">취소</button></div>`;
+            document.getElementById(`cedit-${idx}`).focus();
+        };
+
+        // 💬 댓글 수정 저장
+        window.handleCommentSave = async (idx) => {
+            const newText = document.getElementById(`cedit-${idx}`).value.trim();
+            if(!newText) return alert("내용을 입력하세요.");
+            const ref = doc(db, curType, curId);
+            const s = await getDoc(ref);
+            const comments = [...(s.data().comments || [])];
+            comments[idx] = { ...comments[idx], text: newText };
+            await updateDoc(ref, { comments });
+        };
+
+        // 💬 댓글 수정 취소 - 원래 텍스트 복원
+        window.handleCommentCancel = (idx, originalText) => {
+            document.getElementById(`comment-text-${idx}`).innerText = originalText;
         };
 
         // 🌟 Study 더미 데이터 자동 생성 함수
